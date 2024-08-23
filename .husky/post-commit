@@ -1,0 +1,2 @@
+echo "Post-commit 1 - Add git version tag"
+node ./.husky/git-tag-version.js

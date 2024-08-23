@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Substitution test</title>
+  </head>
+  <body>
+    <h1>Substitution test</h1>
+    <p>This is a text where <strong>this part is taken from a variable</strong>. In this way, we can check that the substitution are done in a correct way. This <em>other value</em> is taken from a deeper variable.</p>
+    <p>Next section is taken from a variable whose value has more than one line:
+      This is line 1<br />
+      This is line 2<br />
+      This is line 3<br /></p>
+    <p>Here, there is an example of a value taken from a list. This is the second element: -second value-</p>
+    <p>Now, This is an example of a value taken from a list whose values are multiline. This is the first element: -first line <br />
+      second line-</p>
+    <p>Finally, this is an example of the use of an unknown variable: ##ERROR - Variable not found: unknown.variable##</p>
+  </body>
+</html>
