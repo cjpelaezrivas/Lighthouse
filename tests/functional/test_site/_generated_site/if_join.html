@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{{title}}</title>
+</head>
+
+<body>
+<h1>{{title}}</h1>
+<h2>Block of code visibility</h2>
+<p>{{if visible}}
+<strong>This text has to be shown</strong>
+{{if-end}}</p>
+<p>{{if visible}}
+<strong>This tagged block of text has to be shown</strong>
+{{if-end visible}}</p>
+<p>{{if not_visible}}
+<strong>This text has NOT to be shown</strong>
+{{if-end}}</p>
+<p>{{if force_not_visible}}
+<strong>This text has NOT to be shown, despite the variable has value</strong>
+{{if-end}}</p>
+<h2>Selections with if-else</h2>
+<p>{{if not_visible}}
+<strong>This text has NOT to be shown</strong>
+{{if-else}}
+<em>This text is the if-else section</em>
+{{if-end}}</p>
+<p>{{if not_visible}}
+<strong>This text has NOT to be shown</strong>
+{{if-else}}
+<em>This tagged text is the if-else section</em>
+{{if-end not_visible}}</p>
+<h2>Inline ifs</h2>
+{{if visible}}<strong>This tagged block of text has to be shown</strong>{{if-end visible}}
+{{if visible}}<strong>This tagged block of text has to be shown</strong>{{if-else}}{{if-end visible}}
+{{if visible}}<strong>This tagged block of text has to be shown</strong>{{if-end visible}}
+{{if not_visible}}<strong>This text has NOT to be shown</strong>{{if-else}}<em>This text is the if-else section</em>{{if-end}}
+{{if not_visible}}{{if-else}}<em>This text is the if-else section</em>{{if-end}}
+<h2>Nested ifs</h2>
+<p>{{if conditionsA[0]}}
+{{if conditionsA[1]}}
+{{if conditionsA[2]}}
+<strong>Nested text that should be shown</strong>
+{{if-else}}
+<strong>Nested text of if-else section that should NOT be shown</strong>
+{{if-end}}
+{{if-end}}
+{{if-end}}</p>
+<p>{{if conditionsB[0]}}
+{{if conditionsB[1]}}
+{{if conditionsB[2]}}
+<strong>Nested text that should NOT be shown</strong>
+{{if-else}}
+<strong>Nested text of if-else section that should be shown</strong>
+{{if-end}}
+{{if-end}}
+{{if-end}}</p>
+<p>{{if conditionsC[0]}}
+{{if conditionsC[1]}}
+{{if conditionsC[2]}}
+<strong>Nested text that should NOT be shown</strong>
+{{if-end}}
+{{if-else}}
+<strong>Nested text of a more external if-else section that should be shown</strong>
+{{if-end}}
+{{if-end}}</p>
+<p>{{if conditionsD[0]}}
+{{if conditionsD[1]}}
+{{if conditionsD[2]}}
+<strong>Nested text that should NOT be shown</strong>
+{{if-else}}
+<strong>Nested text of if-else section that should NOT be shown</strong>
+{{if-end}}
+{{if-end conditionsD[1]}}
+{{if-end}}</p>
+
+</body>
+
+</html>

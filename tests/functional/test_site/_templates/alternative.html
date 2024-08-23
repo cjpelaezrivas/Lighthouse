@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="./css/default.css">
+    {{foreach a author}}
+      <meta name="author" content="{{a}}" />
+    {{foreach-end}}
+</head>
+
+<body>
+  {{foreach include document.include.before_body}}
+    {{include}}
+  {{foreach-end}}
+
+  {{body}}
+
+  {{foreach include document.include.after_body}}
+    {{include}}
+  {{foreach-end document.include.after_body}}
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{{title}}</title>
+</head>
+
+<body>
+<h1>{{title}}</h1>
+<h2>Listing elements of a list:</h2>
+<ul>
+  {{foreach fruit fruits}}
+    <div>
+      <li>{{fruit}}</li>
+    </div>
+  {{foreach-end}}
+</ul>
+<h2>Listing elements of a list using tag:</h2>
+<ul>
+  {{foreach brand brands}}
+    <li>{{brand}}</li>
+  {{foreach-end brands}}
+</ul>
+<h2>Listing elements of a list declared as a single element:</h2>
+<ul>
+  {{foreach country countries}}
+    <div>
+      <li>{{country}}</li>
+    </div>
+  {{foreach-end}}
+</ul>
+<h2>Listing elements of an object list declared as a single element:</h2>
+<ul>
+  {{foreach person person}}
+    <div>
+      <li>{{person}}</li>
+    </div>
+  {{foreach-end}}
+</ul>
+<h2>Inline foreachs:</h2>
+<ul>
+  {{foreach fruit fruits}}<div><li>{{fruit}}</li></div>{{foreach-end}}
+</ul>
+<h2>Empty foreach:</h2>
+<ul>
+  {{foreach fruit fruits}}{{foreach-end}}
+</ul>
+<h2>Nested bucles:</h2>
+{{foreach entry entries}}
+<h3>{{entry}}</h3>
+  <ul>
+    {{foreach tag tags}}
+      <li>{{tag}}</li>
+    {{foreach-end tags}}
+  </ul>
+{{foreach-end entries}}
+<h2>Nested bucles 2:</h2>
+{{foreach entry entries}}
+<h3>{{entry}}</h3>
+  <ul>
+    {{foreach tag tags}}
+      <li>{{tag}}</li>
+    {{foreach-end}}
+  </ul>
+{{foreach-end entries}}
+<h2>Nested bucles 3:</h2>
+{{foreach entry entries}}
+<h3>{{entry}}</h3>
+  <ul>
+    {{foreach tag tags}}
+      <li>{{tag}}</li>
+    {{foreach-end tags}}
+  </ul>
+{{foreach-end}}
+<h2>Nested bucles 4:</h2>
+{{foreach entry entries}}
+<h3>{{entry}}</h3>
+  <ul>
+    {{foreach tag tags}}
+      <li>{{tag}}</li>
+    {{foreach-end}}
+  </ul>
+{{foreach-end}}
+<h2>Accessing to different parts of an element:</h2>
+<p>{{foreach link links}}
+<a href="{{link[0]}}">{{link[1]}}</a>
+{{foreach-end}}</p>
+<h2>Accessing to different parts of an element B:</h2>
+{{foreach object objects}}
+<h3>{{object.name}}</h3>
+  <ul>
+    {{foreach tag object.tags}}
+      <li>{{tag}}</li>
+    {{foreach-end object.tags}}
+  </ul>
+{{foreach-end objects}}
+<h2>Accessing to different parts of an element B 2:</h2>
+{{foreach object objects}}
+<h3>{{object.name}}</h3>
+<p>Tags:</p>
+  <ul>
+    {{foreach tag object.tags}}
+      <li>{{tag}}</li>
+    {{foreach-end}}
+  </ul>
+{{foreach-end objects}}
+<h2>Incorrect use of bucles for accessing to different parts of an element B:</h2>
+{{foreach object objects}}
+<h3>{{object.name}}</h3>
+<p>Tags:</p>
+  <ul>
+    {{foreach tag object.tags}}
+      <li>{{tag}}</li>
+    {{foreach-end}}
+  </ul>
+{{foreach-end}}
+</body>
+
+</html>

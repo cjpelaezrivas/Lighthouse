@@ -1,0 +1,5 @@
+echo "Pre-commit 1 - Execution of functional test"
+npm run functional-test
+echo "Pre-commit 2 - Updating project version to:"
+npm version patch --no-git-tag-version
+git add package.json package-lock.json

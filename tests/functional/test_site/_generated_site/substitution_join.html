@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{{title}}</title>
+</head>
+
+<body>
+<h1>{{title}}</h1>
+<p>This is a text where <strong>{{substitution}}</strong>. In this way, we can check that the substitution are done in a correct way. This <em>{{values.deep.other_value}}</em> is taken from a deeper variable.</p>
+<p>Next section is taken from a variable whose value has more than one line:
+{{multiline_value}}</p>
+<p>Here, there is an example of a value taken from a list. This is the second element: -{{list[1]}}-</p>
+<p>Now, This is an example of a value taken from a list whose values are multiline. This is the first element: -{{list_with_multiline_values[0]}}-</p>
+<p>Finally, this is an example of the use of an unknown variable: {{unknown.variable}}</p>
+
+</body>
+
+</html>

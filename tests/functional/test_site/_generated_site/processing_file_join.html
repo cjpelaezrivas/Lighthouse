@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{{title}}</title>
+</head>
+
+<body>
+<h1>{{title}}</h1>
+<p>Processing file information using substitution:</p>
+<ul>
+<li>{{processing_file_path}}</li>
+<li>{{processing_file_name}}</li>
+<li>{{processing_file_extension}}</li>
+</ul>
+<p>Processing file information using scripts:</p>
+{{g _scripts/generate-processing-file.js}}
+
+</body>
+
+</html>

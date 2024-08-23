@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "strict": true,
+    "module": "esnext",
+    "lib": ["ES2021"],
+    "noEmit": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "target": "es2015"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules/**/*", "target/**/*"]
+}

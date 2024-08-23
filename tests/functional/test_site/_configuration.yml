@@ -1,0 +1,17 @@
+title: Test
+document:
+  template: _templates/base.html
+output:
+  execute:
+    before_all:
+      - "_scripts/file-execution.js::main('before_all')"
+
+    after_all: [
+      "_scripts/file-execution.js::main('after_all')",
+    ]
+  directory: _generated_site
+  copy_files: [
+    "_include/file_to_be_copied_b.yml=>file_to_be_copied_b.yml",
+    "_include/file_to_be_copied_b.yml=>file_to_be_copied_c.yml",
+  ]
+
