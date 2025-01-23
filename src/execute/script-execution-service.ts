@@ -1,6 +1,7 @@
 import vm from "vm";
 import { objectUtils } from "../utils/object-utils";
 import { fileUtils } from "../utils/file-utils";
+import { logUtils } from "../utils/log-utils";
 import { FileService } from "../files/file-service";
 import { AppConfiguration } from "../types/app-configuration";
 import { markdownUtils } from "../utils/markdown-utils";
@@ -12,7 +13,7 @@ export class ScriptExecutionService {
         let call = regexResult[2];
         if (!script) {
             return  returnScriptOutput && appConfiguration.appFlags.debug ?
-                `##WARN - File not found: ${regexResult[1]}##` : "";
+                `##⚠ File not found: ${regexResult[1]}##` : "";
         }
 
         const scriptOutput = this.executeScript(script, call, appConfiguration);
@@ -39,8 +40,8 @@ export class ScriptExecutionService {
 
         module.paths.unshift(appConfiguration.inputDirectory);
 
-        this.debug(`DEBUG - Executing script: ${call}`, appConfiguration);
-        this.debug(`DEBUG - context.lighthouse:`, appConfiguration);
+        this.debug(`Executing script: ${call}`, appConfiguration);
+        this.debug(`context.lighthouse:`, appConfiguration);
         this.debug(context.lighthouse, appConfiguration);
 
         let result = undefined;
@@ -48,10 +49,10 @@ export class ScriptExecutionService {
             vm.createContext(context);
             result = vm.runInContext(script, context);
         } catch (e) {
-            console.error(e);
+            logUtils.err(e);
         }
 
-        this.debug(`DEBUG - End of script execution`, appConfiguration);
+        this.debug(`End of script execution`, appConfiguration);
 
         module.paths.shift();
 
@@ -62,18 +63,14 @@ export class ScriptExecutionService {
         try {
             return fileUtils.readFile(`${appConfiguration.inputDirectory}${path}`);
         } catch (exception) {
-            this.warn(`WARN - File not found: ${path}`);
+            logUtils.warn(`File not found: ${path}`);
             return "";
         }
     }
 
     private debug(log: string, appConfiguration: AppConfiguration) {
         if(appConfiguration.appFlags.debug) {
-            console.info(log);
+            logUtils.info(log);
         }
-    }
-
-    private warn(log: string) {
-        console.warn(log);
     }
 }

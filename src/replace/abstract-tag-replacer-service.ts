@@ -1,6 +1,7 @@
 import { log } from "console";
 import { AppConfiguration } from "../types/app-configuration";
 import { fileUtils } from "../utils/file-utils";
+import { logUtils } from "../utils/log-utils";
 import { RegexObject, RegexResult } from "./tag_regexs";
 
 export abstract class AbstractTagReplacerService {
@@ -53,7 +54,7 @@ export abstract class AbstractTagReplacerService {
 
     private detectIfLoopOnReplacement(input: string, text: string) {
         if(this.outputHistory.includes(text)) {
-            this.warn(`Skipping method execution - Detected loop replacing tags on: ${input}`);
+            logUtils.warn(`Skipping method execution - Detected loop replacing tags on: ${input}`);
             return true;
         }
 
@@ -72,18 +73,14 @@ export abstract class AbstractTagReplacerService {
         try {
             return fileUtils.readFile(`${appConfiguration.inputDirectory}${path}`);
         } catch (exception) {
-            this.warn(`File not found: ${path}`);
+            logUtils.warn(`File not found: ${path}`);
             return "";
         }
     }
 
     protected debug(log: string, appConfiguration: AppConfiguration) {
         if(appConfiguration.appFlags.debug) {
-            console.info(`DEBUG - ${log}`);
+            logUtils.debug(log);
         }
-    }
-
-    protected warn(log: string) {
-        console.warn(`WARN - ${log}`);
     }
 }

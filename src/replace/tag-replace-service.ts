@@ -1,6 +1,7 @@
 import { AppConfiguration } from "../types/app-configuration";
 import { fileUtils } from "../utils/file-utils";
 import { objectUtils } from "../utils/object-utils";
+import { logUtils } from "../utils/log-utils";
 import { ScriptExecutionService} from "../execute/script-execution-service";
 import { MD_EXTENSION } from "../constants";
 import { MarkdownRenderer } from "../content/markdown-renderer";
@@ -54,7 +55,7 @@ export class TagReplacerService extends AbstractTagReplacerService {
         const listFromConfig = this.getListFromConfig(field, appConfiguration);
 
         if(!listFromConfig) {
-            super.warn(`List not found: ${field}`);
+            logUtils.warn(`List not found: ${field}`);
 
             return appConfiguration.appFlags.debug ?
                 `##ERROR - List not found: ${field}##` : "";
@@ -102,7 +103,7 @@ export class TagReplacerService extends AbstractTagReplacerService {
         let value = objectUtils.get(field, appConfiguration.configuration);
 
         if(!value) {
-            super.warn(`Variable not found: ${field}`);
+            logUtils.warn(`Variable not found: ${field}`);
 
             return appConfiguration.appFlags.debug ?
                 `##ERROR - Variable not found: ${field}##` : "";

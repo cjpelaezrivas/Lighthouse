@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
+    "target": "ES2021",
+    "lib": ["ES2021", "DOM"],
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "outDir": "./target",
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "module": "esnext",
-    "lib": ["ES2021"],
-    "noEmit": true,
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "target": "es2015"
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules/**/*", "target/**/*"]
+  "exclude": ["node_modules", "target"]
 }

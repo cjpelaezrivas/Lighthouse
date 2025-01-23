@@ -1,35 +1,6 @@
 const pjson = require("../../package.json");
 const fs = require("fs");
-
-const Color = {
-    Reset: "\x1b[0m",
-    Bright: "\x1b[1m",
-    Dim: "\x1b[2m",
-    Underscore: "\x1b[4m",
-    Blink: "\x1b[5m",
-    Reverse: "\x1b[7m",
-    Hidden: "\x1b[8m",
-
-    FgBlack: "\x1b[30m",
-    FgRed: "\x1b[31m",
-    FgGreen: "\x1b[32m",
-    FgYellow: "\x1b[33m",
-    FgBlue: "\x1b[34m",
-    FgMagenta: "\x1b[35m",
-    FgCyan: "\x1b[36m",
-    FgWhite: "\x1b[37m",
-    FgGray: "\x1b[90m",
-
-    BgBlack: "\x1b[40m",
-    BgRed: "\x1b[41m",
-    BgGreen: "\x1b[42m",
-    BgYellow: "\x1b[43m",
-    BgBlue: "\x1b[44m",
-    BgMagenta: "\x1b[45m",
-    BgCyan: "\x1b[46m",
-    BgWhite: "\x1b[47m",
-    BgGray: "\x1b[100m",
-};
+const chalk = require("chalk");
 
 const testPath = "./tests/functional/test_site/";
 const generatedPath = testPath + "_generated_site/";
@@ -65,16 +36,16 @@ const scenarios = [
     "before_all.txt",
     "after_all.txt",
     "before_each.txt",
-    "after_each.txt"
+    "after_each.txt",
 ];
 
 let results = [];
 
 (function () {
-    print("===========================");
+    printSeparator();
     print("Lighthouse - Functional test");
     print(`version ${pjson.version}`);
-    print("===========================");
+    printSeparator();
     print(`${scenarios.length} scenarios found`);
 
     scenarios.forEach((scenario) => {
@@ -90,36 +61,37 @@ let results = [];
                 result = checkFile(scenario);
             }
         } catch (error) {
-            printError(error)
+            printError(error);
             result = false;
         }
 
         result
-            ? print(`✔ SUCCESSFUL SCENARIO`, Color.FgGreen)
-            : print(`❌ FAILED SCENARIO`, Color.FgRed);
+            ? print(`✔  SUCCESSFUL SCENARIO`, "green")
+            : print(`❌ FAILED SCENARIO`, "red");
         results.push({
             success: result,
             scenario: scenario,
         });
     });
 
-    print("===========================");
+    printSeparator();
     print("Functional test results:");
     results.forEach((result) =>
         print(
-            `${result.success ? "✔" : "❌"} ${result.scenario}`,
-            result.success ? Color.FgGreen : Color.FgRed
+            `${result.success ? "✔ " : "❌ "} ${result.scenario}`,
+            result.success ? "green" : "red"
         )
     );
 
     const totalScenarios = scenarios.length;
-    const successfulScenarios = results.filter((result) => result.success).length;
-    print(
-        `Successful scenarios: ${successfulScenarios} of ${totalScenarios}`
-    );
-    print("===========================");
+    const successfulScenarios = results.filter(
+        (result) => result.success
+    ).length;
+    printSeparator();
+    print(`Successful scenarios: ${successfulScenarios} of ${totalScenarios}`, "bold");
+    printSeparator();
 
-    if(successfulScenarios < totalScenarios) {
+    if (successfulScenarios < totalScenarios) {
         process.exit(1);
     }
 })();
@@ -132,7 +104,11 @@ function checkFileExistence(scenario, isExpected) {
         return true;
     } else {
         print(
-            `Assert exception: ${file} file was ${isExpected ? "not " : ""}found in output directory, and it was ${isExpected ? "" : "not "}expected`
+            `Assert exception: ${file} file was ${
+                isExpected ? "not " : ""
+            }found in output directory, and it was ${
+                isExpected ? "" : "not "
+            }expected`
         );
 
         return false;
@@ -184,10 +160,24 @@ function cleanBlankCharacters(input) {
     return input.replaceAll("\r", "");
 }
 
-function print(message, ...color) {
-    console.log(`${color.join("")}${message}${Color.Reset}`);
+function printSeparator() {
+    print("============================================");
 }
 
 function printError(errorMessage, ...color) {
-    console.error(`${color.join("")}${errorMessage}${Color.Reset}`);
+    print(errorMessage, "red", "bold");
+}
+
+function print(text, ...styles) {
+    console.log(`${applyStyles(text, styles)}`);
+}
+
+function applyStyles(text, ...styles) {
+    return styles.reduce((styledText, style) => {
+        if (chalk[style]) {
+            return chalk[style](styledText);
+        } else {
+            return styledText;
+        }
+    }, text);
 }

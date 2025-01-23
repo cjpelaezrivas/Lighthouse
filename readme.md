@@ -34,23 +34,28 @@ The command `lighthouse` should be available after the installation.
 ## How to run
 
 ```sh
-lighthouse (<path-to-your-site-directory>|<path-to-file-to-process>)
+lighthouse [--flags] [input-path] [input-file]
 ```
 
 Alternatively, this can be used:
 
 ```sh
-npm run build && node ./target/main.js (<path-to-your-site-directory>|<path-to-file-to-process>)
+npm run build && node ./target/app.js [--flags] [input-path] [input-file]
 ```
+
+### Run arguments
+
+| Argument   | Description                                                                                                                                                                     | Default value           |
+|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| input-path | Optional. Tells Lighthouse where is the source directory to generate the site                                                                                                   | Current directory       |
+| input-file | Optional. Relative path inside source of the file to process. Useful when you have a working site and you want to update only one file without having to process the whole site | All files are processed |
 
 ### Run parameters
 
-| Parameter               | Description                                                                                                                                                                                                 | Default value                 |
-|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
-| path-to-site-directory  | Optional. Tells Lighthouse where is the sources to generate the site                                                                                                                                        | Current directory             |
-| path-to-file-to-process | Optional. If specified, Lighthouse will only process this file. Useful when you have a working site and your are updating only one file, allowing you to update it without having to process the whole site | None. All files are processed |
-| --minify                | Optional. Enables the minification of generated files, if disabled a prettier formatter is used                                                                                                             | false                         |
-| --debug                 | Optional. Enables debug mode to show not found variables and files messages on generated files, also generates intermediate MD files while processing and shows more information on the logs                | false                         |
+| Parameter  | Description                                                                                                                                                                                  | Default value           |
+|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| --minify   | Optional. Enables the minification of generated files, if disabled a prettier formatter is used                                                                                              | false                   |
+| --debug    | Optional. Enables debug mode to show not found variables and files messages on generated files, also generates intermediate MD files while processing and shows more information on the logs | false                   |
 
 ## Getting started
 

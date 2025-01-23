@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 import {
+    APP_COMMAND,
+    APP_DESCRIPTION,
     HEADER,
     CONFIGURATION_FILE_NAME,
     DEFAULT_OUTPUT_DIRECTORY,
     CONFIGURATION_OUTPUT_DIRECTORY,
-    DEBUG_FLAG,
-    MINIFY_FLAG
 } from "./constants";
 import { AppConfiguration } from "./types/app-configuration";
 import { ProcessList } from "./types/process-list";
@@ -14,46 +14,57 @@ import { ProcessorService } from "./process/processor-service";
 import { fileUtils } from "./utils/file-utils";
 import { objectUtils } from "./utils/object-utils";
 import { validationUtils } from "./utils/validation-utils";
+import { logUtils } from "./utils/log-utils";
+import { OptionValues, Command } from 'commander';
 
 const pjson = require("../package.json");
-(async function () {
-    console.info(`${HEADER}`);
-    console.info(`version ${pjson.version}\n`);
+const version = pjson.version;
 
-    start();
+(async function () {
+
+    const program = new Command()
+        .name(APP_COMMAND)
+        .description(APP_DESCRIPTION)
+        .version(version, '-v, --version', 'output the version number')
+        .argument('[string]', '(optional) path of source directory or file to process')
+        .argument('[string]', '(optional) relative path of file to process')
+        .option('-m, --minify', 'minify output HTML files, prettier formatter applied if not used')
+        .option('-d, --debug', 'enables debug mode for verbose outputs');
+
+    program.parse();
+    start(program.args, program.opts());
 })();
 
-function start() {
-    console.info("===");
-    const inputPath = getInputPath();
-    const inputDirectory = getInputDirectory(inputPath);
-    console.info(`INFO - input directory: ${inputDirectory}`);
+function start(args: string[], options: OptionValues) {
+    logUtils.log(`${HEADER}`);
+    logUtils.log(`version ${version}\n`);
+    logUtils.horizontalSeparator();
+
+    const inputDirectory = getInputDirectory(args);
+    logUtils.info(`input directory: ${inputDirectory}`);
 
     const globalConfiguration = getConfiguration(inputDirectory);
-    //console.debug({globalConfiguration});
-
-    const debug = getDebugOption();
-    const minify = getMinifyOption();
-    console.info(`INFO - debug: ${debug}`);
-    console.info(`INFO - minify: ${minify}`);
-
-    const fileToProcess = getFileToProcess();
-    if(!!fileToProcess) {
-        console.info(`INFO - fileToProcess: ${fileToProcess}`);
-    }
+    //logUtils.debug({globalConfiguration});
 
     const outputDirectory = getOutputDirectory(
         inputDirectory,
         globalConfiguration
     );
-    console.info(`INFO - output directory: ${outputDirectory}`);
-    console.info("===");
 
-    cleanOutputDirectory(outputDirectory, fileToProcess);
-    const filesToProcess = getFilesToProcess(inputDirectory, fileToProcess);
+    logUtils.info(`output directory: ${outputDirectory}`);
 
-    console.info(
-        `INFO - Starting process... ${filesToProcess.files.length} files and ${filesToProcess.directories.length} directories found`
+    const debug = !!options.debug;
+    const minify = !!options.minify;
+    logUtils.info(`debug: ${debug}`);
+    logUtils.info(`minify: ${minify}`);
+    logUtils.horizontalSeparator();
+
+    const [inputFile, isFile] = getInputFile(inputDirectory, args);
+    cleanOutputDirectory(outputDirectory, inputFile);
+    const filesToProcess = getFilesToProcess(inputDirectory, inputFile, isFile);
+
+    logUtils.info(
+        `Starting process... ${filesToProcess.files.length} files and ${filesToProcess.directories.length} directories found`
     );
 
     let appConfiguration: AppConfiguration = {
@@ -73,53 +84,32 @@ function start() {
 
     const executionTime = (Date.now() - startTime) / 1000;
 
-    console.info("===");
-    console.info(`INFO - Process finished in ${executionTime} seconds`);
-    console.info(`INFO - Site generated in: ${outputDirectory}`);
+    logUtils.horizontalSeparator();
+    logUtils.success(`Process finished in ${executionTime} seconds`);
+    logUtils.success(`Site generated in: ${outputDirectory}`);
+    logUtils.horizontalSeparator();
 }
 
-function getInputPath() {
-    let inputPath = fileUtils.convertPath(getParameter(2) || '.');
-    validationUtils.checkFileExists(inputPath);
+function getInputDirectory(args: string[]){
+    let inputPath = args[0];
+    validationUtils.checkIsDirectory(inputPath);
 
-    return inputPath;
+    return fileUtils.endPath(fileUtils.convertPath(inputPath));
 }
 
-function getFileToProcess() {
-    let fileToProcess = getParameter(3);
+function getInputFile(inputDirectory: string, args: string[]): [string | undefined , boolean] {
+    let inputFile = args[1];
 
-    if(!!fileToProcess) {
-        fileToProcess = fileUtils.convertPath(fileToProcess);
-        validationUtils.checkFileExists(fileToProcess);
+    if (!inputFile) {
+        return [undefined, false];
     }
 
-    return fileToProcess;
-}
+    inputFile = fileUtils.convertPath(inputFile);
+    validationUtils.checkFileExists(inputDirectory + inputFile);
 
-function getParameter(index: number) {
-    let parameter = process.argv[index];
+    logUtils.info(`Processing input: ${inputFile}`);
 
-    if(parameter?.startsWith('--')) {
-       return undefined;
-    }
-
-    return parameter;
-}
-
-function getDebugOption() {
-    return process.argv.some(element => element === DEBUG_FLAG);
-}
-
-function getMinifyOption() {
-    return process.argv.some(element => element === MINIFY_FLAG);
-}
-
-function getInputDirectory(path: string) {
-    if (fileUtils.isFile(path)) {
-        path = fileUtils.getParent(path);
-    }
-
-    return fileUtils.endPath(path);
+    return [ inputFile, fileUtils.isFile(inputDirectory + inputFile) ];
 }
 
 function getConfiguration(inputDirectory: string): object {
@@ -140,15 +130,19 @@ function cleanOutputDirectory(outputDirectory: string, fileToProcess: string | u
     if (!fileToProcess) {
         fileUtils.remove(outputDirectory);
     } else {
-        console.info(`INFO - Skipping cleaning on output directory`);
+        logUtils.info(`Skipping cleaning output directory`);
     }
 
     fileUtils.mkdirs(outputDirectory);
 }
 
-function getFilesToProcess(inputDirectory: string, fileToProcess: string| undefined): ProcessList {
+function getFilesToProcess(inputDirectory: string, fileToProcess: string | undefined, isFile: boolean): ProcessList {
     if (!!fileToProcess) {
-        return { isDirectory: false, files: [ fileToProcess ], directories: [] };
+        return {
+            wholeDirectory: false,
+            files: isFile ? [ fileToProcess ] : [] ,
+            directories: !isFile ? [ fileToProcess ] : []
+        };
     }
 
     const validFiles = fileUtils
@@ -156,9 +150,8 @@ function getFilesToProcess(inputDirectory: string, fileToProcess: string| undefi
         .filter((file) => !fileUtils.isSystemFile(file));
 
     return {
-        isDirectory: true,
+        wholeDirectory: true,
         files: validFiles.filter((file) => fileUtils.isFile(inputDirectory + file)),
-        directories: validFiles.filter((file) => !fileUtils.isFile(inputDirectory + file)
-        ),
+        directories: validFiles.filter((file) => !fileUtils.isFile(inputDirectory + file))
     };
 }

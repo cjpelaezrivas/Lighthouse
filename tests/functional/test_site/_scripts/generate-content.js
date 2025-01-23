@@ -12,3 +12,9 @@ function getContent() {
 function getContent_b() {
     return "<div>This is a content generated using the shortcut for `generate` tag.</div>";
 }
+
+const external = require('_scripts/external-function');
+
+function getContent_c() {
+    return external.getExternalString();
+}

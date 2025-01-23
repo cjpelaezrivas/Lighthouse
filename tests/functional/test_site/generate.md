@@ -7,3 +7,5 @@ title: Generate content from JS test
 {{generate _scripts/generate-content.js::getContent()}}
 
 {{g _scripts/generate-content.js::getContent_b()}}
+
+{{g _scripts/generate-content.js::getContent_c()}}

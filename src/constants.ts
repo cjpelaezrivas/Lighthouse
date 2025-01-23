@@ -1,4 +1,6 @@
 
+export const APP_COMMAND = "lighthouse";
+export const APP_DESCRIPTION = "Static site generator using Markdown, HTML templates and JS scripts";
 export const HEADER = `
 ===============================================================================
 ██╗     ██╗ ██████╗ ██╗  ██╗████████╗██╗  ██╗ ██████╗ ██╗   ██╗███████╗███████╗
@@ -8,9 +10,6 @@ export const HEADER = `
 ███████╗██║╚██████╔╝██║  ██║   ██║   ██║  ██║╚██████╔╝╚██████╔╝███████║███████╗
 ===============================================================================
 `;
-
-export const DEBUG_FLAG = '--debug';
-export const MINIFY_FLAG = '--minify';
 
 export const MD_EXTENSION = 'md';
 export const HTML_EXTENSION = 'html';
@@ -45,3 +44,4 @@ export const CONFIGURATION_DOCUMENT_TOC_FOOTER = 'document.toc.footer';
 
 export const VALUE_REQUIRED_EXCEPTION = "VALUE_REQUIRED_EXCEPTION";
 export const FILE_NOT_FOUND_EXCEPTION = "FILE_NOT_FOUND_EXCEPTION";
+export const VALIDATION_EXCEPTION = "VALIDATION_EXCEPTION";

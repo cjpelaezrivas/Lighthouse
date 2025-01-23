@@ -18,6 +18,7 @@ import {
     PROCESSING_FILE_EXTENSION_FIELD
 } from "../constants";
 import { AppConfiguration } from "../types/app-configuration";
+import { logUtils } from "../utils/log-utils";
 import { ProcessList } from "../types/process-list";
 import { objectUtils } from "../utils/object-utils";
 import { fileUtils } from "../utils/file-utils";
@@ -60,35 +61,35 @@ export class ProcessorService {
 
         this.executeScriptFiles(CONFIGURATION_OUTPUT_EXECUTE_AFTER_ALL, this.appConfiguration.configuration);
 
-        if(filesToProcess.isDirectory) {
+        if(filesToProcess.wholeDirectory) {
             this.processFilesToCopy();
         }
     }
 
     private processFile(file: string) {
         if(this.ignoreFileService.checkIfHasToIgnore(file)) {
-            console.log(`INFO - Ignoring file ${file}`);
+            logUtils.info(`Ignoring file ${file}`);
             return;
         }
 
         const extension = fileUtils.getFileExtension(file).toLowerCase();
 
         if (extension === MD_EXTENSION) {
-            console.log(`INFO - Processing ${extension} file: ${file}`);
+            logUtils.info(`Processing ${extension} file: ${file}`);
             try {
                 this.processMarkdownFile(file);
             } catch(err) {
-                console.error(err);
+                logUtils.err(err);
             }
         } else {
-            console.log(`INFO - Copying ${extension} file: ${file}`);
+            logUtils.info(`Copying ${extension} file: ${file}`);
             this.processOtherFile(file);
         }
     }
 
     private processDirectory(directoryName: string) {
         if(this.ignoreFileService.checkIfHasToIgnore(directoryName)) {
-            console.log(`INFO - Ignoring directory ${directoryName}`);
+            logUtils.info(`Ignoring directory ${directoryName}`);
             return;
         }
 
@@ -98,7 +99,8 @@ export class ProcessorService {
         const listOfFiles = fileUtils.listFilesIn(directory)
             .filter((file) => !fileUtils.isSystemFile(file));
 
-        console.log(`INFO - Processing directory ${directory} (${listOfFiles.length} file(s) found)`);
+        logUtils.info(`Processing directory ${directory} (${listOfFiles.length} file(s) found)`);
+        logUtils.increaseIndentation();
 
         listOfFiles.forEach((fileName) => {
             const file = directory + fileName;
@@ -111,6 +113,8 @@ export class ProcessorService {
                 this.processDirectory(innerDirectoryName);
             }
         });
+
+        logUtils.reduceIndentation();
     }
 
     private processFilesToCopy() {
@@ -129,11 +133,11 @@ export class ProcessorService {
             const destinationFile = this.appConfiguration.outputDirectory + destination;
 
             if(!fileUtils.exists(originFile)) {
-                console.log(`Not possible to include file ${origin}. File not found`);
+                logUtils.warn(`Not possible to include file ${origin}. File not found`);
                 return;
             }
 
-            console.log(`INFO - Copying file ${origin} to ${destination}`);
+            logUtils.info(`Copying file ${origin} to ${destination}`);
             fileUtils.copyFile(originFile, destinationFile);
         });
     }
@@ -257,7 +261,7 @@ export class ProcessorService {
             try {
                 template = fileUtils.readFile(appConfiguration.inputDirectory + templatePath)
             } catch (e) {
-                console.warn(`WARN - Template file: ${templatePath} was not found. Using default template value`);
+                logUtils.warn(`Template file: ${templatePath} was not found. Using default template value`);
             }
         }
 
@@ -269,7 +273,7 @@ export class ProcessorService {
 
         scriptFilesToExecute?.forEach(scriptFile => {
             const typeOfExecution = type.split('.')[2];
-            console.log(`INFO - Executing ${typeOfExecution} file ${scriptFile}`);
+            logUtils.info(`Executing ${typeOfExecution} file ${scriptFile}`);
 
             const regexResult = EXECUTE_SCRIPT_FILE_REGEX.exec(scriptFile);
             EXECUTE_SCRIPT_FILE_REGEX.lastIndex = 0; //Reset search index after each find out
