@@ -78,8 +78,8 @@ export class ProcessorService {
             logUtils.info(`Processing ${extension} file: ${file}`);
             try {
                 this.processMarkdownFile(file);
-            } catch(err) {
-                logUtils.err(err);
+            } catch(e) {
+                logUtils.err(e);
             }
         } else {
             logUtils.info(`Copying ${extension} file: ${file}`);
@@ -176,8 +176,6 @@ export class ProcessorService {
         }
 
         const formattedHtml = appConfigurationMerged.appFlags.minify ? this.minify(rawHtml) : this.prettify(rawHtml);
-
-
         fileUtils.writeFile(destinationPath + destinationFile, formattedHtml);
 
         this.executeScriptFiles(CONFIGURATION_OUTPUT_EXECUTE_AFTER_EACH, appConfigurationMerged.configuration);
@@ -296,12 +294,14 @@ export class ProcessorService {
     }
 
     private minify(html: string) {
-        // https://www.npmjs.com/package/html-minifier
-        const minify = require('html-minifier').minify;
+        // https://www.npmjs.com/package/@minify-html/node
+        const minifyHtml = require('@minify-html/node');
+        const Buffer = require('node:buffer').Buffer;
 
-        return minify(html, {
-            removeAttributeQuotes: true
-        });
+        return minifyHtml.minify(Buffer.from(html), {
+            keep_spaces_between_attributes: true,
+            keep_comments: true
+        }).toString();
     }
 
     /**

@@ -21,11 +21,11 @@ export const logUtils = {
         info(`${indentation()}🔶 ${applyStyles(output, options)}`);
     },
 
-    err(output: any, ...options: string[]) {
+    err(output: (Error | any), ...options: string[]) {
         options.push(`bold`);
         options.push(`red`);
 
-        err(`${indentation()}🟥 ${applyStyles(output, options)}`);
+        err(`${indentation()}🟥 ${applyStyles(output instanceof Error ? output.stack : output, options)}`);
     },
 
     debug(output: any, ...options: string[]) {
