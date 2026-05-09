@@ -9,19 +9,21 @@ import { markdownUtils } from "../utils/markdown-utils";
 export class ScriptExecutionService {
 
     loadAndExecuteScript(regexResult: RegExpExecArray, returnScriptOutput: boolean = true, appConfiguration: AppConfiguration) {
-        let script = this.getFileContent(regexResult[1], appConfiguration);
-        let call = regexResult[2];
+        let path = regexResult[1];
+        let script = this.getFileContent(path, appConfiguration);
+        let call = regexResult[3];
         if (!script) {
             return  returnScriptOutput && appConfiguration.appFlags.debug ?
-                `##⚠ File not found: ${regexResult[1]}##` : "";
+                `##⚠ File not found: ${path}##` : "";
         }
 
-        const scriptOutput = this.executeScript(script, call, appConfiguration);
+        const scriptOutput = this.executeScript(path, script, call, appConfiguration);
 
         return returnScriptOutput ? scriptOutput : "";
     }
 
     executeScript(
+        path: string,
         script: string,
         call: string = `main()`,
         appConfiguration: AppConfiguration
@@ -35,21 +37,21 @@ export class ScriptExecutionService {
             fileUtils: fileUtils,
             fileService: new FileService(appConfiguration.inputDirectory),
             markdownUtils: markdownUtils,
-            lighthouse: objectUtils.deepClone(appConfiguration)
+            lighthouse: appConfiguration // Not need to clone, as this configuration comes from the file processing -- Allows to modify on JS env
         };
 
         module.paths.unshift(appConfiguration.inputDirectory);
 
         this.debug(`Executing script: ${call}`, appConfiguration);
         this.debug(`context.lighthouse:`, appConfiguration);
-        this.debug(context.lighthouse, appConfiguration);
+        this.debug(JSON.stringify(context.lighthouse), appConfiguration);
 
         let result = undefined;
         try {
             vm.createContext(context);
             result = vm.runInContext(script, context);
         } catch (e) {
-            logUtils.err(e);
+            logUtils.err(`${path}::${call}\n${e}`);
         }
 
         this.debug(`End of script execution`, appConfiguration);

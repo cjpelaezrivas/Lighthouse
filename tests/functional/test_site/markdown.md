@@ -37,6 +37,12 @@ _italicized text_
 ```javascript
 function() {
   console.log("This is some javascript included in a markdown code block, and it will be converted to valid HTML with code syntax highlighting.");
+
+
+  console.log("Using multiple lines");
+  if(true) {
+    console.log("And tabs");
+  }
 }
 ```
 
@@ -54,3 +60,5 @@ This is another link: [Google]
 This should be the last line.
 
 [Google]: https://www.google.com/
+
+[...]: # (This is a MD comment -- This line should not be visible)

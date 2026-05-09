@@ -1,0 +1,4 @@
+key_1_1: value 1.1
+key_1_2: value 1.2
+key_1_3: "{{external_config_0.key_0}}"
+key_1_4: "{{external_config_2.key_5}}"

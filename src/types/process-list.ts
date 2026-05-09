@@ -1,5 +1,5 @@
 export type ProcessList = {
-    wholeDirectory: boolean;
+    isProcessingDirectory: boolean;
     files: string[];
     directories: string[];
 }

@@ -21,6 +21,13 @@ export const fileUtils = {
         return stat.isFile();
     },
 
+    /**
+     * Returns if an extension is contained in the given list, case insensitive
+     */
+    isExtension(extensions:string[], ext:string) {
+        return extensions.some(e => e.toLowerCase() === ext.toLowerCase());
+    },
+
     isSystemFile(file: string) {
         return file.startsWith("_") || file.startsWith(".");
     },
@@ -73,15 +80,18 @@ export const fileUtils = {
         return path.substring(path.lastIndexOf(PATH_SEPARATOR) + 1, path.lastIndexOf(EXTENSION_SEPARATOR));
     },
 
-    getFileExtension(path: string) {
-        return path.substring(path.lastIndexOf(EXTENSION_SEPARATOR) + 1);
-    },
-
     /**
      * Returns the name of the file passed in the parameters including the extension
      */
     getFile(path: string) {
         return path.substring(path.lastIndexOf(PATH_SEPARATOR) + 1);
+    },
+
+    /**
+     * Returns the extension of the file passed in the parameters
+     */
+    getFileExtension(path: string) {
+        return path.substring(path.lastIndexOf(EXTENSION_SEPARATOR) + 1);
     },
 
     copyFile(

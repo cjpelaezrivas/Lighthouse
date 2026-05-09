@@ -1,0 +1,23 @@
+table {
+    font-size: 0.85rem;
+    border: var(--lh-border-basic);
+    border-radius: 0;
+}
+
+thead {
+    border-bottom: 1px solid var(--lh-border-color);;
+}
+
+tr {
+    border-bottom: var(--lh-border-basic);
+}
+
+th, td {
+    border-right: var(--lh-border-basic);
+    border-left: var(--lh-border-basic);
+    border-radius: 0;
+}
+
+th {
+    background-color: var(--lh-secondary-bg-color);
+}

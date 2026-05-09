@@ -9,13 +9,15 @@ import {
     INCLUDE_ITEM_REGEX,
     EXECUTE_SCRIPT_FILE_REGEX,
     CONFIGURATION_OUTPUT_COPY_FILES,
-    CONFIGURATION_OUTPUT_EXECUTE_BEFORE_ALL,
-    CONFIGURATION_OUTPUT_EXECUTE_BEFORE_EACH,
-    CONFIGURATION_OUTPUT_EXECUTE_AFTER_EACH,
-    CONFIGURATION_OUTPUT_EXECUTE_AFTER_ALL,
-    PROCESSING_FILE_PATH_FIELD,
-    PROCESSING_FILE_NAME_FIELD,
-    PROCESSING_FILE_EXTENSION_FIELD
+    CONFIGURATION_EXECUTE_BEFORE_ALL,
+    CONFIGURATION_EXECUTE_BEFORE_EACH,
+    CONFIGURATION_EXECUTE_BEFORE_SAVE_EACH,
+    CONFIGURATION_EXECUTE_AFTER_EACH,
+    CONFIGURATION_EXECUTE_AFTER_ALL,
+    CONFIGURATION_PROCESSING_FILE_PATH,
+    CONFIGURATION_PROCESSING_FILE_NAME,
+    CONFIGURATION_PROCESSING_FILE_EXTENSION,
+    PROCESSING_FILE_CONTENT_FIELD,
 } from "../constants";
 import { AppConfiguration } from "../types/app-configuration";
 import { logUtils } from "../utils/log-utils";
@@ -24,23 +26,27 @@ import { objectUtils } from "../utils/object-utils";
 import { fileUtils } from "../utils/file-utils";
 import { markdownUtils } from "../utils/markdown-utils";
 import { MarkdownRenderer } from "../content/markdown-renderer";
-import { HtmlService } from "../content/html-service";
+import { ContentProcessor } from "../content/content-processor";
 import { TocService } from "../content/toc-service";
 import { TagReplacerService } from "../replace/tag-replace-service";
 import { IgnoreFileService } from "../files/ignore-file-service";
 import { ScriptExecutionService} from "../execute/script-execution-service";
-import { MDTagReplacerService } from "../replace/md-tag-replace-service";
+import { SitemapService } from "./sitemap-service";
 
 export class ProcessorService {
+
+    private static readonly SKIP_TAG_REPLACEMENTS: string[] = [ "toc" ];
 
     private appConfiguration: AppConfiguration;
     private ignoreFileService: IgnoreFileService;
     private tocService: TocService = new TocService();
-    private htmlService: HtmlService = new HtmlService();
+    private contentProcessor: ContentProcessor = new ContentProcessor();
     private markdownRenderer: MarkdownRenderer = new MarkdownRenderer();
-    private mdTagReplacerService: MDTagReplacerService = new MDTagReplacerService();
     private tagReplacerService: TagReplacerService = new TagReplacerService();
     private scriptExecutionService: ScriptExecutionService = new ScriptExecutionService();
+    private sitemapService: SitemapService = new SitemapService();
+
+    private processedFiles: string[] = [];
 
     constructor(appConfiguration: AppConfiguration) {
         this.appConfiguration = appConfiguration;
@@ -48,7 +54,7 @@ export class ProcessorService {
     }
 
     process(filesToProcess: ProcessList) {
-        this.executeScriptFiles(CONFIGURATION_OUTPUT_EXECUTE_BEFORE_ALL, this.appConfiguration.configuration);
+        this.executeScriptFiles(CONFIGURATION_EXECUTE_BEFORE_ALL, this.appConfiguration);
 
         filesToProcess.files.forEach((fileName) => {
             const file = this.appConfiguration.inputDirectory + fileName;
@@ -59,11 +65,13 @@ export class ProcessorService {
             this.processDirectory(directoryName);
         });
 
-        this.executeScriptFiles(CONFIGURATION_OUTPUT_EXECUTE_AFTER_ALL, this.appConfiguration.configuration);
+        this.executeScriptFiles(CONFIGURATION_EXECUTE_AFTER_ALL, this.appConfiguration);
 
-        if(filesToProcess.wholeDirectory) {
+        if(filesToProcess.isProcessingDirectory) {
             this.processFilesToCopy();
         }
+
+        this.sitemapService.generateSitemapIfEnabled(this.processedFiles, this.appConfiguration);
     }
 
     private processFile(file: string) {
@@ -117,6 +125,68 @@ export class ProcessorService {
         logUtils.reduceIndentation();
     }
 
+    private processMarkdownFile(mdFile: string) {
+        let [metadata, mdBody] = markdownUtils.splitMetadataAndBody(mdFile);
+        const appConfigurationMerged = this.mergeMetadataIntoAppConfiguration(metadata);
+        const mdRenderer = this.markdownRenderer.configure(appConfigurationMerged);
+
+        this.setProcessingFile(mdFile, appConfigurationMerged);
+        this.replaceTagsInConfiguration(appConfigurationMerged);
+        this.executeScriptFiles(CONFIGURATION_EXECUTE_BEFORE_EACH, appConfigurationMerged);
+
+        if(appConfigurationMerged.appFlags.debug) {
+            logUtils.debug(JSON.stringify(appConfigurationMerged));
+        }
+
+        const relativeDestinationPath = this.getRelativeDestinationPath(mdFile, appConfigurationMerged);
+        const destinationPath = this.getDestinationPath(relativeDestinationPath, appConfigurationMerged);
+        const destinationFileName = this.getDestinationFileName(mdFile, appConfigurationMerged);
+        const template = this.getTemplate(appConfigurationMerged);
+
+        mdBody = this.tocService.includeTocIfEnabled(mdBody, appConfigurationMerged);
+        mdBody = this.tagReplacerService.replace(mdBody, appConfigurationMerged, {skipTags: ProcessorService.SKIP_TAG_REPLACEMENTS});
+        mdBody = this.contentProcessor.postProcessMD(mdBody);
+
+        let rendererBody = mdRenderer.render(mdBody);
+        rendererBody = this.tocService.extractTocIfExists(rendererBody, appConfigurationMerged);
+
+        let rawHtml = this.joinTemplateAndBody(template, rendererBody);
+        rawHtml = this.contentProcessor.preprocessRawHtml(rawHtml);
+
+        if(appConfigurationMerged.appFlags.debug) {
+            const joinFile = fileUtils.getFileName(destinationFileName) + `_join` + `.${HTML_EXTENSION}`;
+            fileUtils.writeFile(destinationPath + joinFile, rawHtml);
+        }
+
+        rawHtml = this.tagReplacerService.replace(rawHtml, appConfigurationMerged);
+        rawHtml = this.tagReplacerService.restoreIgnoreBlocks(rawHtml);
+        rawHtml = this.contentProcessor.postProcessRawHtml(rawHtml);
+
+        if(appConfigurationMerged.appFlags.debug) {
+            const rawFile = fileUtils.getFileName(destinationFileName) + `_raw` + `.${HTML_EXTENSION}`;
+            fileUtils.writeFile(destinationPath + rawFile, rawHtml);
+        }
+
+        this.setProcessingFileContent(rawHtml, appConfigurationMerged);
+        this.executeScriptFiles(CONFIGURATION_EXECUTE_BEFORE_SAVE_EACH, appConfigurationMerged);
+        const processedHtml = this.getProcessingFileContent(appConfigurationMerged);
+
+        const formattedHtml = appConfigurationMerged.appFlags.minify ? this.minify(processedHtml) : this.prettify(processedHtml);
+        fileUtils.writeFile(destinationPath + destinationFileName, formattedHtml);
+        this.processedFiles.push(relativeDestinationPath + destinationFileName);
+
+        this.executeScriptFiles(CONFIGURATION_EXECUTE_AFTER_EACH, appConfigurationMerged);
+    }
+
+    /**
+     * Processing any not MD file is equivalent to be copied to the output directory
+     */
+    private processOtherFile(originalFile: string) {
+        const destinationFile = this.appConfiguration.outputDirectory +
+            this.getRelativePath (originalFile, this.appConfiguration.inputDirectory);
+        fileUtils.copyFile(originalFile, destinationFile);
+    }
+
     private processFilesToCopy() {
         const filesToCopy = objectUtils.get(CONFIGURATION_OUTPUT_COPY_FILES, this.appConfiguration.configuration) as string[];
         filesToCopy?.forEach((fileToCopy) => {
@@ -142,110 +212,59 @@ export class ProcessorService {
         });
     }
 
-    private processMarkdownFile(mdFile: string) {
-        this.setProcessingFile(mdFile);
-
-        let [metadata, mdBody] = markdownUtils.splitMetadataAndBody(mdFile);
-        const appConfigurationMerged = this.mergeMetadataIntoAppConfiguration(metadata);
-
-        this.executeScriptFiles(CONFIGURATION_OUTPUT_EXECUTE_BEFORE_EACH, appConfigurationMerged.configuration);
-
-        const destinationPath = this.getDestinationFilePath(mdFile, appConfigurationMerged);
-        const destinationFile = this.getDestinationFileName(mdFile, appConfigurationMerged);
-        const template = this.getTemplate(appConfigurationMerged);
-
-        mdBody = this.tocService.includeTocIfEnabled(mdBody, appConfigurationMerged);
-        mdBody = this.mdTagReplacerService.replace(mdBody, appConfigurationMerged);
-        let rendererBody = this.markdownRenderer.configure(appConfigurationMerged).render(mdBody);
-        rendererBody = this.tocService.extractTocIfExists(rendererBody, appConfigurationMerged);
-
-        let rawHtml = this.joinTemplateAndBody(template, rendererBody);
-        rawHtml = this.htmlService.preprocessRawHtml(rawHtml);
-
-        if(appConfigurationMerged.appFlags.debug) {
-            const joinFile = fileUtils.getFileName(destinationFile) + `_join` + `.${HTML_EXTENSION}`;
-            fileUtils.writeFile(destinationPath + joinFile, rawHtml);
-        }
-
-        rawHtml = this.tagReplacerService.replace(rawHtml, appConfigurationMerged);
-        rawHtml = this.htmlService.postProcessRawHtml(rawHtml);
-
-        if(appConfigurationMerged.appFlags.debug) {
-            const rawFile = fileUtils.getFileName(destinationFile) + `_raw` + `.${HTML_EXTENSION}`;
-            fileUtils.writeFile(destinationPath + rawFile, rawHtml);
-        }
-
-        const formattedHtml = appConfigurationMerged.appFlags.minify ? this.minify(rawHtml) : this.prettify(rawHtml);
-        fileUtils.writeFile(destinationPath + destinationFile, formattedHtml);
-
-        this.executeScriptFiles(CONFIGURATION_OUTPUT_EXECUTE_AFTER_EACH, appConfigurationMerged.configuration);
-        this.unsetProcessingFile();
-    }
-
-    private setProcessingFile(mdFile:string) {
+    private setProcessingFile(mdFile:string, appConfiguration: AppConfiguration) {
         //Used on external scripts
-        this.appConfiguration.processingFile = {
+        appConfiguration.processingFile = {
             path: mdFile,
             name: fileUtils.getFileName(mdFile),
             extension: fileUtils.getFileExtension(mdFile).toLocaleLowerCase()
         };
 
         //Used on tags replacements
-        this.setInConfiguration(PROCESSING_FILE_PATH_FIELD, this.appConfiguration.processingFile.path);
-        this.setInConfiguration(PROCESSING_FILE_NAME_FIELD, this.appConfiguration.processingFile.name);
-        this.setInConfiguration(PROCESSING_FILE_EXTENSION_FIELD, this.appConfiguration.processingFile.extension);
+        objectUtils.set(CONFIGURATION_PROCESSING_FILE_PATH, appConfiguration.processingFile.path, appConfiguration.configuration);
+        objectUtils.set(CONFIGURATION_PROCESSING_FILE_NAME, appConfiguration.processingFile.name, appConfiguration.configuration);
+        objectUtils.set(CONFIGURATION_PROCESSING_FILE_EXTENSION, appConfiguration.processingFile.extension, appConfiguration.configuration);
     }
 
-    private setInConfiguration(field: string, value: string) {
-        objectUtils.set(field, value, this.appConfiguration.configuration);
-    }
-
-    private unsetProcessingFile() {
-        delete this.appConfiguration.processingFile;
-
-        this.deleteFromConfigurationIfExist(PROCESSING_FILE_PATH_FIELD);
-        this.deleteFromConfigurationIfExist(PROCESSING_FILE_NAME_FIELD);
-        this.deleteFromConfigurationIfExist(PROCESSING_FILE_EXTENSION_FIELD);
-    }
-
-    private deleteFromConfigurationIfExist(field: string) {
-        if (field in this.appConfiguration.configuration) {
-            delete this.appConfiguration.configuration[field as keyof Object];
-        }
+    private getProcessingFileContent(appConfiguration: AppConfiguration) {
+        return appConfiguration.processingFile?.content as string;
     }
 
     private mergeMetadataIntoAppConfiguration(metadata: object) {
         const appConfigurationMerged = objectUtils.deepClone(this.appConfiguration);
         appConfigurationMerged.configuration = objectUtils.deepMerge(appConfigurationMerged.configuration, metadata);
 
-        return this.replaceTagsInConfiguration(appConfigurationMerged);
+        return appConfigurationMerged;
+    }
+
+    private setProcessingFileContent(html: string, appConfiguration: AppConfiguration) {
+        objectUtils.set(PROCESSING_FILE_CONTENT_FIELD, html, appConfiguration);
     }
 
     private replaceTagsInConfiguration(appConfigurationMerged: AppConfiguration) {
         return objectUtils.applyFunctionToProperties(
-            appConfigurationMerged,
-            value => this.tagReplacerService.replace(value, appConfigurationMerged));
+            appConfigurationMerged.configuration,
+            value => this.tagReplacerService.replace(value, appConfigurationMerged, {isReplacingConfigValue: true}));
     }
 
     private joinTemplateAndBody(template: string, body: string) {
         return template.replaceAll(BODY_TAG_REGEX, body);
     }
 
+    private getRelativeDestinationPath(filePath: string, appConfiguration: AppConfiguration) {
+        const path = fileUtils.endPath(objectUtils.get(CONFIGURATION_DOCUMENT_OUTPUT_PATH, appConfiguration.configuration) as string
+            || this.getRelativePath(fileUtils.getParent(filePath), appConfiguration.inputDirectory));
+
+        return path === fileUtils.getPathSeparator() ? "" : path;
+    }
+
+    private getDestinationPath(relativePath: string, appConfiguration: AppConfiguration) {
+        return fileUtils.endPath(appConfiguration.outputDirectory + relativePath);
+    }
+
     private getDestinationFileName(mdFile: string, appConfiguration: AppConfiguration) {
         return (objectUtils.get(CONFIGURATION_DOCUMENT_OUTPUT_NAME, appConfiguration.configuration)
             || fileUtils.getFileName(mdFile)) + `.${HTML_EXTENSION}`;
-    }
-
-    private getDestinationFilePath(mdFile: string, appConfiguration: AppConfiguration) {
-        let path = objectUtils.get(CONFIGURATION_DOCUMENT_OUTPUT_PATH, appConfiguration.configuration);
-
-        if(!!path) {
-            path = appConfiguration.outputDirectory + path;
-        } else {
-            path =  this.convertToOutputPath(fileUtils.getParent(mdFile), appConfiguration);
-        }
-
-        return fileUtils.endPath(path);
     }
 
     private getTemplate(appConfiguration: AppConfiguration) {
@@ -266,11 +285,10 @@ export class ProcessorService {
         return template;
     }
 
-    private executeScriptFiles(type: string, configuration: object) {
-        const scriptFilesToExecute = objectUtils.get(type, configuration) as string[];
-
+    private executeScriptFiles(type: string, appConfiguration: AppConfiguration) {
+        const scriptFilesToExecute = objectUtils.get(type, appConfiguration.configuration) as string[];
         scriptFilesToExecute?.forEach(scriptFile => {
-            const typeOfExecution = type.split('.')[2];
+            const typeOfExecution = type.split('.')[1];
             logUtils.info(`Executing ${typeOfExecution} file ${scriptFile}`);
 
             const regexResult = EXECUTE_SCRIPT_FILE_REGEX.exec(scriptFile);
@@ -280,16 +298,22 @@ export class ProcessorService {
                 return; //Continue
             }
 
-            this.scriptExecutionService.loadAndExecuteScript(regexResult, false, this.appConfiguration);
+            this.scriptExecutionService.loadAndExecuteScript(regexResult, false, appConfiguration);
         });
     }
 
     private  prettify(html: string) {
-        // https://www.npmjs.com/package/pretty
-        const pretty = require('pretty');
+        // https://www.npmjs.com/package/js-beautify
+        const beautify = require('js-beautify').html;
 
-        return pretty(html, {
-            ocd: true
+        return beautify(html, {
+            unformatted: ['code', 'pre', 'em', 'strong', 'span'],
+            indent_char: ' ',
+            indent_size: 2,
+            indent_inner_html: true,
+            indent_empty_lines: true,
+            max_preserve_newlines: 0,
+            preserve_newlines: true,
         });
     }
 
@@ -304,18 +328,7 @@ export class ProcessorService {
         }).toString();
     }
 
-    /**
-     * Process of any not MD file is to be copied to the output directory
-     */
-    private processOtherFile(originalFile: string) {
-        const destinationFile = this.convertToOutputPath (originalFile, this.appConfiguration);
-        fileUtils.copyFile(originalFile, destinationFile);
-    }
-
-    private convertToOutputPath(file: string, appConfiguration: AppConfiguration) {
-        return file.replace(
-            appConfiguration.inputDirectory,
-            appConfiguration.outputDirectory
-        );
+    private getRelativePath(path: string,  inputDirectory: string) {
+        return path.replace(inputDirectory, "");
     }
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>Code test</title>
+  </head>
+
+  <body>
+    <h1>Code test</h1>
+    <h2>In-line code</h2>
+    <p>This file us used to test code output, <code>like this one</code>.</p>
+    <h2>Code blocks</h2>
+    <p>Bellow this line, there are a couple of code blocks.</p>
+    <p>Generic code block:</p>
+    <pre><code class="hljs">console.log(&quot;Hello, world!&quot;);
+</code></pre>
+    <p>Syntax specified code block:</p>
+    <pre><code class="hljs"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Programa</span> {
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+        System.out.println(<span class="hljs-string">&quot;Hello, world!&quot;</span>);
+    }
+}
+</code></pre>
+    <h2>Tags are replaced inside code</h2>
+    <pre><code class="hljs"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hello, Clippy!&quot;</span>);
+</code></pre>
+    <h2>Loading files to be shown as code</h2>
+    <pre><code class="hljs"><span class="hljs-attr">key_1:</span> <span class="hljs-string">value</span> <span class="hljs-number">1</span>
+<span class="hljs-attr">key_2:</span> <span class="hljs-string">value</span> <span class="hljs-number">2</span>
+<span class="hljs-attr">subconfig:</span> <span class="hljs-string">&quot;key_1_1: value 1.1
+key_1_2: value 1.2
+key_1_3: &quot;</span><span class="hljs-comment">##ERROR - Variable not found: external_config_0.key_0##&quot;</span>
+<span class="hljs-attr">key_1_4:</span> <span class="hljs-string">&quot;##ERROR - Variable not found: external_config_2.key_5##&quot;</span><span class="hljs-string">&quot;
+</span></code></pre>
+  </body>
+
+</html>

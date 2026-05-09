@@ -1,5 +1,7 @@
 import {
     CONFIGURATION_DOCUMENT_HEADERS_GENERATE_IDS,
+    CONFIGURATION_DOCUMENT_HEADERS_SHOW_PERMALINKS,
+    CONFIGURATION_DOCUMENT_HEADERS_PERMALINK_SYMBOL,
     CONFIGURATION_DOCUMENT_TOC_ENABLED,
     CONFIGURATION_DOCUMENT_TOC_LEVELS,
     CONFIGURATION_DOCUMENT_TOC_HEADER,
@@ -17,6 +19,16 @@ export class MarkdownRenderer {
             CONFIGURATION_DOCUMENT_HEADERS_GENERATE_IDS,
             appConfiguration.configuration,
             false
+        );
+        const showPermalinks = objectUtils.get(
+            CONFIGURATION_DOCUMENT_HEADERS_SHOW_PERMALINKS,
+            appConfiguration.configuration,
+            true
+        );
+        const permalinkSymbol = objectUtils.get(
+            CONFIGURATION_DOCUMENT_HEADERS_PERMALINK_SYMBOL,
+            appConfiguration.configuration,
+            "#"
         );
         const tocEnabled = objectUtils.get(
             CONFIGURATION_DOCUMENT_TOC_ENABLED,
@@ -79,15 +91,14 @@ export class MarkdownRenderer {
 
         if (tocEnabled || idHeadersEnabled) {
             // https://www.npmjs.com/package/markdown-it-anchor
-            md.use(require("markdown-it-anchor"), {
+            const anchor = require('markdown-it-anchor')
+            md.use(anchor, {
                 level: tocLevels[0],
                 tabIndex: false,
-                // slugify: string => string,
-                permalink: false,
-                // renderPermalink: (slug, opts, state, permalink) => {},
-                permalinkClass: "header-anchor",
-                permalinkSymbol: "¶",
-                permalinkBefore: false,
+                permalink: showPermalinks ? anchor.permalink.linkInsideHeader({
+                    symbol: permalinkSymbol,
+                    placement: 'after'
+                }) : undefined
             });
         }
 
@@ -95,8 +106,8 @@ export class MarkdownRenderer {
             // https://www.npmjs.com/package/markdown-it-table-of-contents
             md.use(require("markdown-it-table-of-contents"), {
                 includeLevel: tocLevels,
-                containerHeaderHtml: tocHeader,
-                containerFooterHtml: tocFooter,
+                containerHeaderHtml: !!tocHeader ? `<span class="table-of-contents-header">${tocHeader}</span>` : "",
+                containerFooterHtml: !!tocFooter ? `<span class="table-of-contents-footer">${tocFooter}</span>`: "",
             });
         }
 

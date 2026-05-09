@@ -2,6 +2,9 @@
 title: TOC on template test
 document:
   template: _templates/toc.html
+  headers:
+    permalinks:
+      enabled: false
   toc:
     enabled: true
     levels: [ 1, 2, 3 ]

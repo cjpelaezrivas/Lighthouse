@@ -2,10 +2,23 @@
 title: Foreach test
 fruits: [ apple, pinnaple, pear, banana, peach ]
 brands: [ Nissan, Toyota, Mercedes ]
+numbers: [ 1, 2, 3 ]
+numbers_b:
+  - 1
+  - 2
+  - 3
+numbers_c: 1
+numbers_d:
+  - 1
 countries: Spain
+countries_b:
+  - Spain
 person:
   name: John
   age: 23
+person_b:
+  - name: John
+    age: 23
 entries: [ Entry 1, Entry 2 ]
 tags: [ tag1, tag2, tag3 ]
 links: [
@@ -41,10 +54,44 @@ objects:
   {{foreach-end brands}}
 </ul>
 
+## Listing elements as primitive
+
+<ul>
+  {{foreach number numbers}}
+    <li>{{number}}</li>
+  {{foreach-end}}
+</ul>
+
+<ul>
+  {{foreach number numbers_b}}
+    <li>{{number}}</li>
+  {{foreach-end}}
+</ul>
+
+<ul>
+  {{foreach number numbers_c}}
+    <li>{{number}}</li>
+  {{foreach-end}}
+</ul>
+
+<ul>
+  {{foreach number numbers_d}}
+    <li>{{number}}</li>
+  {{foreach-end}}
+</ul>
+
 ## Listing elements of a list declared as a single element:
 
 <ul>
   {{foreach country countries}}
+    <div>
+      <li>{{country}}</li>
+    </div>
+  {{foreach-end}}
+</ul>
+
+<ul>
+  {{foreach country countries_b}}
     <div>
       <li>{{country}}</li>
     </div>
@@ -57,6 +104,22 @@ objects:
   {{foreach person person}}
     <div>
       <li>{{person}}</li>
+    </div>
+  {{foreach-end}}
+</ul>
+
+<ul>
+  {{foreach person person}}
+    <div>
+      <li>{{person.name}} / {{person.age}}</li>
+    </div>
+  {{foreach-end}}
+</ul>
+
+<ul>
+  {{foreach person person_b}}
+    <div>
+      <li>{{person.name}} / {{person.age}}</li>
     </div>
   {{foreach-end}}
 </ul>

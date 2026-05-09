@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>Include configuration from nested YAML</title>
+  </head>
+
+  <body>
+    <h1>Include configuration from nested YAML</h1>
+    <p>Getting variable values from external YAML config files:</p>
+    <ul>
+      <li>value 1</li>
+      <li>value 1.1</li>
+      <li>value 1.2</li>
+      <li>value 2</li>
+      <li>value 3</li>
+      <li>value 4</li>
+    </ul>
+    <p>Success - Variables set before using can be found:</p>
+    <ul>
+      <li>Variable value found</li>
+    </ul>
+    <p>Error - Variables used before setting can not be found:</p>
+    <ul>
+      <li>##ERROR - Variable not found: external_config_2.key_5##</li>
+    </ul>
+    <p>Including YAML file as String:</p>
+    <p>key_1: value 1
+      key_2: value 2
+      subconfig: &quot;key_1_1: value 1.1
+      key_1_2: value 1.2
+      key_1_3: &quot;Variable value found&quot;
+      key_1_4: &quot;value 5&quot;&quot;</p>
+    <p><em>Note: Notice it finds <code>external_config.subconfig.key_1_4</code> here, because the tag is replaced after configuration was processed</em></p>
+  </body>
+
+</html>

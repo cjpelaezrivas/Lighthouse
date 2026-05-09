@@ -16,6 +16,14 @@ export const objectUtils = {
         return (item && typeof item === "string") || item instanceof String;
     },
 
+    isPrimitive(item: any) {
+        return (item && typeof item !== "object" && typeof item !== "function");
+    },
+
+    isFunction(item: any) {
+        return item && typeof item !== "function";
+    },
+
     getAsString(path: string, object: object) {
         const value = objectUtils.get(path, object);
         return !!value ? String(value) : value;
@@ -32,7 +40,7 @@ export const objectUtils = {
         for (let i = 0; i < parts.length; i++) {
             value = value[parts[i] as keyof typeof value];
 
-            if (!value) {
+            if (value == null || value == undefined) {
                 return defaultValue;
             }
         }
@@ -63,8 +71,7 @@ export const objectUtils = {
             return {};
         }
 
-        const YAML = require("yamljs");
-        return YAML.parse(yaml.trim());
+        return require("yamljs").parse(yaml.trim());
     },
 
     deepClone(source: object) {

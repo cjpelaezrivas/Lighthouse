@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ignore blocks test</title>
+  </head>
+
+  <body>
+    <h1>Ignore blocks test</h1>
+    <h2>Ignoring Lighthouse tags from header</h2>
+    <p>{{not-replaced-variable-0}}</p>
+    <h2>Ignoring Lighthouse tags</h2>
+    <p>{{not-replaced-variable-1}}</p>
+    <h2>Nested ignore blocks</h2>
+    <p>{{not-replaced-variable-2}}<br />
+      {{foreach var list}}
+      {{not-replaced-variable-3}}
+      {{foreach-end}}
+    </p>
+    <h2>Ignoring blocks being included from another MD file</h2>
+    <p>{{not-replaced-variable-4}}</p>
+    <h2>Ignoring Lighthouse tags on code blocks</h2>
+    <pre><code class="hljs">&lt;ul&gt;
+{{foreach role roles}}
+    &lt;li&gt;{{role.name}}&lt;/li&gt;
+{{foreach-end}}
+&lt;/ul&gt;
+
+{{i _include/file_a.html}}
+{{i _include/file_b.md}}
+</code></pre>
+    <p>This works as well on in-line code blocks: <code>{{not-replaced-variable-5}}</code></p>
+  </body>
+
+</html>

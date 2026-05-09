@@ -1,0 +1,82 @@
+nav {
+    width: -moz-available; /* WebKit-based browsers will ignore this. */
+    width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+    width: fill-available;
+
+    background-color: var(--lh-primary-fg-color);
+    border-bottom: var(--lh-border-basic);
+
+    box-shadow: none;
+}
+
+nav ul:not(.browser-default), nav ul:not(.browser-default) > li {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+nav .nav-wrapper {
+    align-items: center;
+    width: 90%;
+}
+
+nav .nav-wrapper .nav-item {
+    display: inline-block;
+}
+
+nav .nav-button {
+    height: var(--lh-nav-height-sm);
+    line-height: var(--lh-nav-height-sm);
+
+    margin: 0;
+    padding: 0 0.75rem;
+
+    color: var(--lh-text-inverse-color);
+    text-decoration: none;
+
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+
+    cursor: pointer;
+}
+
+nav .nav-button:hover {
+    background-color: var(--lh-element-background-hover-darker);
+}
+
+
+nav .nav-button .material-symbols {
+    position: initial;
+}
+
+nav .brand-logo {
+    height: var(--lh-nav-height-sm);
+
+    padding: 0 0.8rem;
+    font-size: unset;
+}
+
+nav .brand-logo-icon {
+    position: relative;
+    display: inline-block;
+
+    top: 10px;
+    height: 40px;
+    width: 40px;
+}
+
+nav .brand-logo-text {
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+
+/*medium-and-up*/
+@media only screen and (min-width: 601px) {
+    nav .nav-button {
+        height: var(--lh-nav-height-md);
+        line-height: var(--lh-nav-height-md);
+    }
+
+    nav .brand-logo {
+        height: var(--lh-nav-height-md);
+    }
+}

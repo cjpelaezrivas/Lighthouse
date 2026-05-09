@@ -3,6 +3,7 @@
 import {
     APP_COMMAND,
     APP_DESCRIPTION,
+    APP_VERSION_INFO,
     HEADER,
     CONFIGURATION_FILE_NAME,
     DEFAULT_OUTPUT_DIRECTORY,
@@ -26,10 +27,11 @@ const version = pjson.version;
         .name(APP_COMMAND)
         .description(APP_DESCRIPTION)
         .version(version, '-v, --version', 'output the version number')
-        .argument('[string]', '(optional) path of source directory or file to process')
-        .argument('[string]', '(optional) relative path of file to process')
+        .argument('<source-directory-path>', 'source directory path, where _configuration.yml file is')
+        .argument('[file-to-process]', '(optional) relative file path to process, does not clean the output directory')
         .option('-m, --minify', 'minify output HTML files, prettier formatter applied if not used')
-        .option('-d, --debug', 'enables debug mode for verbose outputs');
+        .option('-d, --debug', 'enables debug mode for verbose outputs')
+        .showHelpAfterError();
 
     program.parse();
     start(program.args, program.opts());
@@ -44,13 +46,8 @@ function start(args: string[], options: OptionValues) {
     logUtils.info(`input directory: ${inputDirectory}`);
 
     const globalConfiguration = getConfiguration(inputDirectory);
-    //logUtils.debug({globalConfiguration});
 
-    const outputDirectory = getOutputDirectory(
-        inputDirectory,
-        globalConfiguration
-    );
-
+    const outputDirectory = getOutputDirectory(inputDirectory, globalConfiguration);
     logUtils.info(`output directory: ${outputDirectory}`);
 
     const debug = !!options.debug;
@@ -74,6 +71,8 @@ function start(args: string[], options: OptionValues) {
             debug,
             minify
         },
+        version: `${APP_VERSION_INFO}-${version}`,
+        versionNumber: version,
         configuration: globalConfiguration,
     };
 
@@ -139,7 +138,7 @@ function cleanOutputDirectory(outputDirectory: string, fileToProcess: string | u
 function getFilesToProcess(inputDirectory: string, fileToProcess: string | undefined, isFile: boolean): ProcessList {
     if (!!fileToProcess) {
         return {
-            wholeDirectory: false,
+            isProcessingDirectory: false,
             files: isFile ? [ fileToProcess ] : [] ,
             directories: !isFile ? [ fileToProcess ] : []
         };
@@ -150,7 +149,7 @@ function getFilesToProcess(inputDirectory: string, fileToProcess: string | undef
         .filter((file) => !fileUtils.isSystemFile(file));
 
     return {
-        wholeDirectory: true,
+        isProcessingDirectory: true,
         files: validFiles.filter((file) => fileUtils.isFile(inputDirectory + file)),
         directories: validFiles.filter((file) => !fileUtils.isFile(inputDirectory + file))
     };

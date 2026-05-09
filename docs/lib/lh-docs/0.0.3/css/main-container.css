@@ -1,0 +1,11 @@
+main .section .container {
+    width: 90%;
+}
+
+main .section .container .col {
+    max-width: 100%;
+}
+
+main .section .container p {
+    text-align: justify;
+}
