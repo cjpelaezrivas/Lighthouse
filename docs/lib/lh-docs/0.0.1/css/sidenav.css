@@ -1,0 +1,95 @@
+.sidenav {
+    display: flex;
+    flex-direction: column;
+
+    width: var(--lh-sidebar-max-width);
+    height: 100vh;
+    border-right: var(--lh-border-basic);
+    padding-bottom: 0;
+
+    background-color: var(--lh-primary-bg-color);
+
+    -webkit-box-shadow: var(--lh-box-shadow);
+    box-shadow: var(--lh-box-shadow);
+
+    overflow: hidden !important;
+}
+
+ul.sidenav, ul.sidenav ul, ul.sidenav li {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.sidenav a#brand-logo {
+    text-decoration: none;
+    padding: 0;
+}
+
+.sidenav .brand-logo-icon {
+    display: block;
+    width: 100%;
+    height: 8.0rem;
+
+    background-color: var(--lh-primary-fg-color);
+    margin: 0.9rem 0 0.2rem 0;
+}
+
+.sidenav .sidenav-brand-name {
+    display: block;
+    width: 100%;
+
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.3rem;
+
+    line-height: 2.5rem;
+    margin-top: -0.4rem;
+
+    border-bottom: var(--lh-border-basic);
+}
+
+.sidenav a#brand-logo, .sidenav li > a {
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+}
+
+.sidenav a#brand-logo:hover, .sidenav li > a:hover {
+    background-color: var(--lh-element-background-hover);
+}
+
+.sidenav li > a {
+    color: var(--lh-text-color);
+    text-decoration: none;
+    height: var(--lh-sidenav-element-height);
+    line-height: var(--lh-sidenav-element-height);
+    border-bottom: var(--lh-border-basic);
+    font-size: 0.85rem;
+}
+
+.sidenav-items {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.sidenav .page-footer {
+  flex-shrink: 0;
+}
+
+/*overlay*/
+
+.sidenav-overlay {
+    backdrop-filter: blur(2px);
+}
+
+/*scrollbar*/
+
+.sidenav-items::-webkit-scrollbar {
+    width: 4px;
+    background: var(--lh-scroll-background);
+}
+
+.sidenav-items::-webkit-scrollbar-thumb {
+    background: var(--lh-scroll-bar);
+    border-radius: 4px;
+}

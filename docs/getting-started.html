@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Getting started - Lighthouse</title>
+    <meta name="author" content="">
+    <meta name="description" content="Static site generator using Markdown, HTML templates and JS scripts; coded in Node.js">
+    <meta name="generator" content="es.prlazarus/lighthouse-1.3.0">
+    </meta>
+    <link rel="apple-touch-icon" sizes="180x180" href="static/icon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/icon/favicon-16x16.png">
+    <link rel="manifest" href="static/site.webmanifest">
+    <link rel="canonical" href="https://cjpelaezrivas.dev/Lighthouse/getting-started">
+    <link rel="prev" href="https://cjpelaezrivas.dev/Lighthouse/index.html">
+    </link>
+    <link rel="next" href="https://cjpelaezrivas.dev/Lighthouse/first-site.html">
+    </link>
+    <link rel="stylesheet" href="lib/materialize/1.0.0/css/materialize.css">
+    <link rel="stylesheet" href="lib/material-symbols-outlined/css/material-symbols.css" />
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/replace.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/main.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/main-container.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/buttons.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/navbar.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/sidenav.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/headers.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/toc.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/footer.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/pager.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/code.css">
+    <link id="style-code-theme" rel="stylesheet" href="lib/lh-docs/0.0.1/css/code/github.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/alerts.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/tables.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/dark-mode.css">
+    <script src="lib/lh-docs/0.0.1/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/source-github.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/scroll-to-top.css">
+  </head>
+  
+  <body>
+    <header>
+      <div class="navbar-fixed">
+        <nav role="navigation">
+          <div class="nav-wrapper container">
+            <span class="sidenav-trigger nav-button hide-on-large-only waves-effect waves-light" data-target="sidenav">
+            <span class="material-symbols">menu</span>
+            </span>
+            <a id="logo-container" class="brand-logo nav-button hide-on-large-only waves-effect waves-light" href=".">
+              <span id="nav-icon" class="brand-logo-icon hide-on-small-only"></span>
+              <span class="brand-logo-text">Lighthouse</span>
+            </a>
+            <span id="dark-mode-switch" class="right nav-button waves-effect waves-light">
+            <span class="material-symbols">routine</span>
+            </span>
+            <ul class="right hide-on-med-and-down">
+              <li>
+                <a class="source-github nav-button waves-effect waves-light" href="https://github.com/cjpelaezrivas/Lighthouse">
+                  <div class="source-github-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                      <path d="M7.976 0A7.977 7.977 0 0 0 0 7.976c0 3.522 2.3 6.507 5.431 7.584.392.049.538-.196.538-.392v-1.37c-2.201.49-2.69-1.076-2.69-1.076-.343-.93-.881-1.175-.881-1.175-.734-.489.048-.489.048-.489.783.049 1.224.832 1.224.832.734 1.223 1.859.88 2.3.685.048-.538.293-.88.489-1.076-1.762-.196-3.621-.881-3.621-3.964 0-.88.293-1.566.832-2.153-.05-.147-.343-.978.098-2.055 0 0 .685-.196 2.201.832.636-.196 1.322-.245 2.007-.245s1.37.098 2.006.245c1.517-1.027 2.202-.832 2.202-.832.44 1.077.146 1.908.097 2.104a3.16 3.16 0 0 1 .832 2.153c0 3.083-1.86 3.719-3.62 3.915.293.244.538.733.538 1.467v2.202c0 .196.146.44.538.392A7.984 7.984 0 0 0 16 7.976C15.951 3.572 12.38 0 7.976 0z" />
+                    </svg>
+                  </div>
+                  <div class="source-github-info">
+                    See on Github
+                    <ul class="source-github-info__items">
+                      <li class="source-github-info__item"><span class="material-symbols">sell</span>
+                        1.3.0
+                      </li>
+                      <li class="source-github-info__item"><span class="material-symbols">star</span>
+                        1
+                      </li>
+                    </ul>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <ul id="sidenav" class="sidenav sidenav-fixed">
+        <a id="brand-logo" href="./">
+          <span class="brand-logo-icon"></span>
+          <span class="sidenav-brand-name primary-color-text">Lighthouse</span>
+        </a>
+        <li>
+          <a class="source-github hide-on-large-only" href="https://github.com/cjpelaezrivas/Lighthouse">
+            <div class="source-github-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <path d="M7.976 0A7.977 7.977 0 0 0 0 7.976c0 3.522 2.3 6.507 5.431 7.584.392.049.538-.196.538-.392v-1.37c-2.201.49-2.69-1.076-2.69-1.076-.343-.93-.881-1.175-.881-1.175-.734-.489.048-.489.048-.489.783.049 1.224.832 1.224.832.734 1.223 1.859.88 2.3.685.048-.538.293-.88.489-1.076-1.762-.196-3.621-.881-3.621-3.964 0-.88.293-1.566.832-2.153-.05-.147-.343-.978.098-2.055 0 0 .685-.196 2.201.832.636-.196 1.322-.245 2.007-.245s1.37.098 2.006.245c1.517-1.027 2.202-.832 2.202-.832.44 1.077.146 1.908.097 2.104a3.16 3.16 0 0 1 .832 2.153c0 3.083-1.86 3.719-3.62 3.915.293.244.538.733.538 1.467v2.202c0 .196.146.44.538.392A7.984 7.984 0 0 0 16 7.976C15.951 3.572 12.38 0 7.976 0z" />
+              </svg>
+            </div>
+            <div class="source-github-info">
+              See on Github
+              <ul class="source-github-info__items">
+                <li class="source-github-info__item"><span class="material-symbols">sell</span>
+                  1.3.0
+                </li>
+                <li class="source-github-info__item"><span class="material-symbols">star</span>
+                  1
+                </li>
+              </ul>
+            </div>
+          </a>
+        </li>
+        <div class="sidenav-items">
+          <li><a href="./">Home</a></li>
+          <li><a href="./getting-started.html">Getting started</a></li>
+          <li><a href="./first-site.html">Creating your first site</a></li>
+          <li><a href="./license.html">License</a></li>
+        </div>
+        <li class="page-footer">
+          <link rel="stylesheet" href="../static/css/sidenav-footer.css">
+          <div class="container">
+            Coded in <a href="https://en.wikipedia.org/wiki/Spain">
+              <img src="static/icon/spain.png" style="margin: -2px 2px 0 2px;" alt="Spain flag" /></a>
+            with <span class="material-symbols text-icon" style="color:#cc0000; ">favorite</span> by
+            <i><a href="http://prlazarus.es">prLázarus</a></i><br>
+            <span class="material-symbols text-icon">lightbulb</span>Powered by <i><a href="https://cjpelaezrivas.dev/Lighthouse/">Lighthouse</a></i>
+            and <i><a href="https://pages.github.com/">GitHub Pages</a></i><br>
+            <a href="mailto:prlazarus.info@gmail.com">prlazarus.info@gmail.com</a>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <main>
+      <div class="section" id="index-banner">
+        <div class="container">
+          <div class="row">
+            <div class="col l12 xl9">
+              <h1>Getting started</h1>
+              <div class="toc-on-top hide-on-extra-large-only">
+                <div class="table-of-contents"><span class="table-of-contents-header">On this page</span>
+                  <ul>
+                    <li><a href="#how-to-install">How to install </a></li>
+                    <li><a href="#how-to-run">How to run </a>
+                      <ul>
+                        <li><a href="#run-arguments">Run arguments </a></li>
+                        <li><a href="#run-parameters">Run parameters </a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <h2 id="how-to-install">How to install <a class="header-anchor" href="#how-to-install">#</a></h2>
+              <pre><code class="hljs">npm install -g
+</code></pre>
+              <p>The command <code>lighthouse</code> should be available after the installation.</p>
+              <h2 id="how-to-run">How to run <a class="header-anchor" href="#how-to-run">#</a></h2>
+              <pre><code class="hljs">lighthouse [--flags] [input-path] [input-file]
+</code></pre>
+              <p>Alternatively, this can be used:</p>
+              <pre><code class="hljs">npm run build &amp;&amp; node ./target/app.js [--flags] [input-path] [input-file]
+</code></pre>
+              <h3 id="run-arguments">Run arguments <a class="header-anchor" href="#run-arguments">#</a></h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Argument</th>
+                    <th>Description</th>
+                    <th>Default value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>input-path</td>
+                    <td>Optional. Tells Lighthouse where is the source directory to generate the site</td>
+                    <td>Current directory</td>
+                  </tr>
+                  <tr>
+                    <td>input-file</td>
+                    <td>Optional. Relative path inside source of the file to process. Useful when you have a working site and you want to update only one file without having to process the whole site</td>
+                    <td>All files are processed</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 id="run-parameters">Run parameters <a class="header-anchor" href="#run-parameters">#</a></h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Description</th>
+                    <th>Default value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>--minify</td>
+                    <td>Optional. Enables the minification of generated files, if disabled a prettier formatter is used</td>
+                    <td>false</td>
+                  </tr>
+                  <tr>
+                    <td>--debug</td>
+                    <td>Optional. Enables debug mode to show not found variables and files messages on generated files, also generates intermediate MD files while processing and shows more information on the logs</td>
+                    <td>false</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col xl3 hide-on-large-and-down">
+              <div class="table-of-contents"><span class="table-of-contents-header">On this page</span>
+                <ul>
+                  <li><a href="#how-to-install">How to install </a></li>
+                  <li><a href="#how-to-run">How to run </a>
+                    <ul>
+                      <li><a href="#run-arguments">Run arguments </a></li>
+                      <li><a href="#run-parameters">Run parameters </a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    </main>
+    <footer class="page-footer">
+      <div class="section">
+        <nav class="pager-prev-next">
+          <div class="container">
+            <div class="row">
+              <div class="col s12 m6">
+                <a class="pager-link prev" href="./index.html">
+                  <span class="description">Previous page</span>
+                  <span class="title">Lighthouse</span>
+                </a>
+              </div>
+              <div class="col s12 m6">
+                <a class="pager-link next" href="./first-site.html">
+                  <span class="description">Next page</span>
+                  <span class="title">Creating your first site</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </footer>
+    <a id="scrollToTopBtn" class="btn-large btn-flat btn-outline waves-effect waves-light primary-color"><span
+        class="icon material-symbols">keyboard_double_arrow_up</span>Back to top</a>
+    <script src="lib/materialize/1.0.0/js/materialize.js"></script>
+    <script src="lib/lh-docs/0.0.1/js/materialize-init.js"></script>
+    <script src="lib/lh-docs/0.0.1/js/scroll-to-top.js"></script>
+    <script src="lib/lh-docs/0.0.1/js/toc.js"></script>
+  </body>
+  
+</html>

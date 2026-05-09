@@ -4,38 +4,46 @@ const log = console.log;
 const info = console.info;
 const err = console.error;
 
-let depth = 0;
+let indentationDepth = 0;
 
 export const logUtils = {
-    log(output: any, ...options: string[]) {
+    log(msg: any, ...options: string[]) {
+       let output = indentAdditionalLines(msg);
         log(`${indentation()}${applyStyles(output, options)}`);
     },
 
-    info(output: any, ...options: string[]) {
+    info(msg: any, ...options: string[]) {
+        let output = indentAdditionalLines(msg);
         info(`${indentation()}🔵 ${applyStyles(output, options)}`);
     },
 
-    warn(output: any, ...options: string[]) {
+    warn(msg: any, ...options: string[]) {
         options.push(`yellow`);
 
+        let output = indentAdditionalLines(msg);
         info(`${indentation()}🔶 ${applyStyles(output, options)}`);
     },
 
-    err(output: (Error | any), ...options: string[]) {
+    err(msg: (Error | any), ...options: string[]) {
         options.push(`bold`);
         options.push(`red`);
 
-        err(`${indentation()}🟥 ${applyStyles(output instanceof Error ? output.stack : output, options)}`);
+        let output = String(msg instanceof Error && !!msg.stack ? msg.stack : msg);
+        output = indentAdditionalLines(output);
+
+        err(`${indentation()}🟥 ${applyStyles(output, options)}`);
     },
 
-    debug(output: any, ...options: string[]) {
+    debug(msg: any, ...options: string[]) {
+        let output = indentAdditionalLines(msg);
         log(`${indentation()}🟢 ${applyStyles(output, options)}`);
     },
 
-    success(output: any, ...options: string[]) {
+    success(msg: any, ...options: string[]) {
         options.push(`bold`);
         options.push(`green`);
 
+        let output = indentAdditionalLines(msg);
         log(`${indentation()}✔  ${applyStyles(output, options)}`);
     },
 
@@ -44,15 +52,19 @@ export const logUtils = {
     },
 
     increaseIndentation() {
-        depth++;
+        indentationDepth++;
     },
 
     reduceIndentation() {
-        depth--;
+        indentationDepth--;
     },
 };
 
-function indentation() {
+function indentAdditionalLines(output: string) {
+    return output.replaceAll("\n", `\n${indentation()}`);
+}
+
+function indentation(depth: number = indentationDepth) {
     return "⎸  ".repeat(depth);
 }
 

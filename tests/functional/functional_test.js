@@ -16,13 +16,18 @@ const scenarios = [
     "substitution",
     "headers",
     "toc",
+    "toc_header_footer",
+    "ignore",
     "if",
     "foreach",
+    "code",
     "processing_file",
     "include",
     "include_md",
+    "include_config",
     "generate",
     "alternative_template",
+    "execute_scripts",
     "!change_name.html",
     "new_name", // change_name
     "!configuration_from_script.html",
@@ -37,6 +42,7 @@ const scenarios = [
     "after_all.txt",
     "before_each.txt",
     "after_each.txt",
+    "sitemap.xml"
 ];
 
 let results = [];

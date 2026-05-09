@@ -1,0 +1,94 @@
+:root {
+    --lh-primary-fg-color: #24467f;
+    --lh-primary-bg-color: #ffffff;
+    --lh-secondary-bg-color: #f4f4f4;
+    --lh-accent-color: #ff9800;
+
+    --lh-text-color: #151515;
+    --lh-text-inverse-color: #fdfdfd;
+    --lh-link-hover-color: #cc0000;
+
+    --lh-border-color: #cccccc;
+    --lh-border-basic: 1px solid var(--lh-border-color);
+    --lh-border-radius: 5px;
+
+    --lh-element-background-hover: rgba(0, 0, 0, 0.05);
+    --lh-element-background-hover-darker: rgba(0, 0, 0, 0.1);
+
+    --brand-logo-url: url('/static/icon/logo-flat.svg');
+    --lh-sidenav-element-height: 35px;
+
+    --lh-scroll-background: var(--lh-border-color);
+    --lh-scroll-bar: rgba(0, 0, 0, 0.2);
+
+    --lh-footer-text-color: var(--lh-text-color);
+    --lh-footer-bg-color: var(--lh-primary-bg-color);
+
+    --lh-content-max-width: 60rem;
+    --lh-sidebar-max-width: 300px;
+    --lh-box-shadow: none;
+
+    --lh-code-theme-light: lib/lh-docs/0.0.1/css/code/github.css;
+    --lh-code-theme-dark: lib/lh-docs/0.0.1/css/code/github-dark.css;
+
+    --lh-alert-note-color: #f9f9f9;
+    --lh-alert-note-border-color: color-mix(in srgb, var(--lh-alert-note-color) 80%, black);
+    --lh-alert-note-text-color: color-mix(in srgb, var(--lh-alert-note-color) 40%, black);
+    --lh-alert-info-color: #dbe8fc;
+    --lh-alert-info-border-color: color-mix(in srgb, var(--lh-alert-info-color) 80%, black);
+    --lh-alert-info-text-color: color-mix(in srgb, var(--lh-alert-info-color) 40%, black);
+    --lh-alert-warning-color: #fff2e0;
+    --lh-alert-warning-border-color: color-mix(in srgb, var(--lh-alert-warning-color) 80%, black);
+    --lh-alert-warning-text-color: color-mix(in srgb, var(--lh-alert-warning-color) 40%, black);
+    --lh-alert-danger-color: #fceaea;
+    --lh-alert-danger-border-color: color-mix(in srgb, var(--lh-alert-danger-color) 80%, black);
+    --lh-alert-danger-text-color: color-mix(in srgb, var(--lh-alert-danger-color) 40%, black);
+}
+
+.brand-logo-icon {
+    background-color: var(--lh-text-inverse-color);
+
+    -webkit-mask: var(--brand-logo-url) no-repeat center;
+    mask: var(--brand-logo-url) no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+.primary-color {
+    background-color: var(--lh-primary-fg-color) !important;
+}
+
+.primary-color-text {
+    color: var(--lh-primary-fg-color) !important;
+}
+
+/*medium-and-up*/
+@media only screen and (min-width: 601px) {
+
+}
+
+/*medium-and-down*/
+@media only screen and (max-width: 992px) {
+    header, main, footer {
+        padding-left: 0;
+    }
+}
+
+/*large-and-up*/
+@media only screen and (min-width: 993px) {
+
+}
+
+/*large-and-down*/
+@media only screen and (max-width: 1200px) {
+  .hide-on-large-and-down {
+    display: none !important;
+  }
+}
+
+/* extra-large */
+@media only screen and (min-width: 1201px) {
+  .hide-on-extra-large-only {
+    display: none !important;
+  }
+}

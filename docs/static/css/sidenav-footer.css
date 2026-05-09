@@ -1,0 +1,32 @@
+.material-symbols.text-icon {
+    font-size: 1.2em;
+}
+
+#logo_b {
+    margin-top: 0.5rem;
+    display: block;
+
+    height: 60px;
+    width: 100%;
+
+    background-image: url("../icon/logo_b.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    filter: opacity(.5);
+}
+
+#logo_b:hover {
+    filter: opacity(.8);
+}
+
+/* Dark mode */
+
+.dark-mode .footer-copyright #logo_b {
+    filter: invert(1) opacity(.5);
+}
+
+.dark-mode .footer-copyright #logo_b:hover {
+    filter: invert(1) opacity(.8);
+}

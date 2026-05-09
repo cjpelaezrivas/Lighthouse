@@ -2,7 +2,7 @@
 title: Move processed to root path
 document:
     output:
-        path: '.'
+        path: '/'
 ---
 
 # {{title}}

@@ -1,0 +1,1 @@
+{{ignore}}{{not-replaced-variable-4}}{{ignore-end}}

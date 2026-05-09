@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creating your first site - Lighthouse</title>
+    <meta name="author" content="">
+    <meta name="description" content="Static site generator using Markdown, HTML templates and JS scripts; coded in Node.js">
+    <meta name="generator" content="es.prlazarus/lighthouse-1.3.0">
+    </meta>
+    <link rel="apple-touch-icon" sizes="180x180" href="static/icon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/icon/favicon-16x16.png">
+    <link rel="manifest" href="static/site.webmanifest">
+    <link rel="canonical" href="https://cjpelaezrivas.dev/Lighthouse/first-site">
+    <link rel="prev" href="https://cjpelaezrivas.dev/Lighthouse/getting-started.html">
+    </link>
+    <link rel="next" href="https://cjpelaezrivas.dev/Lighthouse/license.html">
+    </link>
+    <link rel="stylesheet" href="lib/materialize/1.0.0/css/materialize.css">
+    <link rel="stylesheet" href="lib/material-symbols-outlined/css/material-symbols.css" />
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/replace.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/main.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/main-container.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/buttons.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/navbar.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/sidenav.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/headers.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/toc.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/footer.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/pager.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/code.css">
+    <link id="style-code-theme" rel="stylesheet" href="lib/lh-docs/0.0.1/css/code/github.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/alerts.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/tables.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/dark-mode.css">
+    <script src="lib/lh-docs/0.0.1/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/source-github.css">
+    <link rel="stylesheet" href="lib/lh-docs/0.0.1/css/scroll-to-top.css">
+  </head>
+  
+  <body>
+    <header>
+      <div class="navbar-fixed">
+        <nav role="navigation">
+          <div class="nav-wrapper container">
+            <span class="sidenav-trigger nav-button hide-on-large-only waves-effect waves-light" data-target="sidenav">
+            <span class="material-symbols">menu</span>
+            </span>
+            <a id="logo-container" class="brand-logo nav-button hide-on-large-only waves-effect waves-light" href=".">
+              <span id="nav-icon" class="brand-logo-icon hide-on-small-only"></span>
+              <span class="brand-logo-text">Lighthouse</span>
+            </a>
+            <span id="dark-mode-switch" class="right nav-button waves-effect waves-light">
+            <span class="material-symbols">routine</span>
+            </span>
+            <ul class="right hide-on-med-and-down">
+              <li>
+                <a class="source-github nav-button waves-effect waves-light" href="https://github.com/cjpelaezrivas/Lighthouse">
+                  <div class="source-github-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                      <path d="M7.976 0A7.977 7.977 0 0 0 0 7.976c0 3.522 2.3 6.507 5.431 7.584.392.049.538-.196.538-.392v-1.37c-2.201.49-2.69-1.076-2.69-1.076-.343-.93-.881-1.175-.881-1.175-.734-.489.048-.489.048-.489.783.049 1.224.832 1.224.832.734 1.223 1.859.88 2.3.685.048-.538.293-.88.489-1.076-1.762-.196-3.621-.881-3.621-3.964 0-.88.293-1.566.832-2.153-.05-.147-.343-.978.098-2.055 0 0 .685-.196 2.201.832.636-.196 1.322-.245 2.007-.245s1.37.098 2.006.245c1.517-1.027 2.202-.832 2.202-.832.44 1.077.146 1.908.097 2.104a3.16 3.16 0 0 1 .832 2.153c0 3.083-1.86 3.719-3.62 3.915.293.244.538.733.538 1.467v2.202c0 .196.146.44.538.392A7.984 7.984 0 0 0 16 7.976C15.951 3.572 12.38 0 7.976 0z" />
+                    </svg>
+                  </div>
+                  <div class="source-github-info">
+                    See on Github
+                    <ul class="source-github-info__items">
+                      <li class="source-github-info__item"><span class="material-symbols">sell</span>
+                        1.3.0
+                      </li>
+                      <li class="source-github-info__item"><span class="material-symbols">star</span>
+                        1
+                      </li>
+                    </ul>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <ul id="sidenav" class="sidenav sidenav-fixed">
+        <a id="brand-logo" href="./">
+          <span class="brand-logo-icon"></span>
+          <span class="sidenav-brand-name primary-color-text">Lighthouse</span>
+        </a>
+        <li>
+          <a class="source-github hide-on-large-only" href="https://github.com/cjpelaezrivas/Lighthouse">
+            <div class="source-github-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <path d="M7.976 0A7.977 7.977 0 0 0 0 7.976c0 3.522 2.3 6.507 5.431 7.584.392.049.538-.196.538-.392v-1.37c-2.201.49-2.69-1.076-2.69-1.076-.343-.93-.881-1.175-.881-1.175-.734-.489.048-.489.048-.489.783.049 1.224.832 1.224.832.734 1.223 1.859.88 2.3.685.048-.538.293-.88.489-1.076-1.762-.196-3.621-.881-3.621-3.964 0-.88.293-1.566.832-2.153-.05-.147-.343-.978.098-2.055 0 0 .685-.196 2.201.832.636-.196 1.322-.245 2.007-.245s1.37.098 2.006.245c1.517-1.027 2.202-.832 2.202-.832.44 1.077.146 1.908.097 2.104a3.16 3.16 0 0 1 .832 2.153c0 3.083-1.86 3.719-3.62 3.915.293.244.538.733.538 1.467v2.202c0 .196.146.44.538.392A7.984 7.984 0 0 0 16 7.976C15.951 3.572 12.38 0 7.976 0z" />
+              </svg>
+            </div>
+            <div class="source-github-info">
+              See on Github
+              <ul class="source-github-info__items">
+                <li class="source-github-info__item"><span class="material-symbols">sell</span>
+                  1.3.0
+                </li>
+                <li class="source-github-info__item"><span class="material-symbols">star</span>
+                  1
+                </li>
+              </ul>
+            </div>
+          </a>
+        </li>
+        <div class="sidenav-items">
+          <li><a href="./">Home</a></li>
+          <li><a href="./getting-started.html">Getting started</a></li>
+          <li><a href="./first-site.html">Creating your first site</a></li>
+          <li><a href="./license.html">License</a></li>
+        </div>
+        <li class="page-footer">
+          <link rel="stylesheet" href="../static/css/sidenav-footer.css">
+          <div class="container">
+            Coded in <a href="https://en.wikipedia.org/wiki/Spain">
+              <img src="static/icon/spain.png" style="margin: -2px 2px 0 2px;" alt="Spain flag" /></a>
+            with <span class="material-symbols text-icon" style="color:#cc0000; ">favorite</span> by
+            <i><a href="http://prlazarus.es">prLázarus</a></i><br>
+            <span class="material-symbols text-icon">lightbulb</span>Powered by <i><a href="https://cjpelaezrivas.dev/Lighthouse/">Lighthouse</a></i>
+            and <i><a href="https://pages.github.com/">GitHub Pages</a></i><br>
+            <a href="mailto:prlazarus.info@gmail.com">prlazarus.info@gmail.com</a>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <main>
+      <div class="section" id="index-banner">
+        <div class="container">
+          <div class="row">
+            <div class="col l12 xl9">
+              <h1>Creating your first site</h1>
+              <div class="toc-on-top hide-on-extra-large-only">
+                <div class="table-of-contents"><span class="table-of-contents-header">On this page</span>
+                  <ul>
+                    <li><a href="#minimal-configuration">Minimal configuration </a></li>
+                    <li><a href="#using-a-custom-template">Using a custom template </a></li>
+                    <li><a href="#tags-on-your-markdown-files">Tags on your Markdown files </a>
+                      <ul>
+                        <li><a href="#foreach-tag">foreach tag </a></li>
+                        <li><a href="#if-tag">if tag </a></li>
+                        <li><a href="#variable-tags">variable tags </a></li>
+                        <li><a href="#including-external-files">Including external files </a></li>
+                        <li><a href="#generating-code-using-javascript">Generating code using Javascript </a></li>
+                        <li><a href="#ignoring-lighthouse-tags">Ignoring Lighthouse tags </a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#looking-for-more-examples%3F">Looking for more examples? </a></li>
+                    <li><a href="#reserved-configuration">Reserved configuration </a></li>
+                  </ul>
+                </div>
+              </div>
+              <h2 id="minimal-configuration">Minimal configuration <a class="header-anchor" href="#minimal-configuration">#</a></h2>
+              <p>Start creating your first site following the next steps:</p>
+              <ol>
+                <li>Create the configuration file : <code>_configuration.yaml</code>:</li>
+              </ol>
+              <pre><code class="hljs"><span class="hljs-attr">title:</span> <span class="hljs-string">Your</span> <span class="hljs-string">new</span> <span class="hljs-string">static</span> <span class="hljs-string">site</span>
+</code></pre>
+              <ol start="2">
+                <li>Create the a Markdown formatted file with your content: <code>index.md</code>:</li>
+              </ol>
+              <pre><code class="hljs"># {{title}}
+
+Welcome to your new static site generated using **Lighthouse**!
+</code></pre>
+              <ol start="3">
+                <li>Execute Lighthouse command to generate the site:</li>
+              </ol>
+              <pre><code class="hljs">lighthouse (&lt;path-to-site-directory&gt;)
+</code></pre>
+              <ol start="4">
+                <li>Check the new <code>_site</code> directory that contains your new generated site. The <code>index.html</code> should have this content:</li>
+              </ol>
+              <pre><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Your new static site<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+Welcome to your new static site generated using <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>Lighthouse<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>!
+</code></pre>
+              <h2 id="using-a-custom-template">Using a custom template <a class="header-anchor" href="#using-a-custom-template">#</a></h2>
+              <p>It is possible to set a custom template file on <code>_configuration.yml</code> file, or on the <code>yaml</code> header inside any <code>md</code> file. The template to be used has to be used on a <code>html</code> file that needs to be referenced on the required configuration path as can be seen bellow.</p>
+              <pre><code class="hljs"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>{{title}}<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  {{body}}
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+              <pre><code class="hljs"><span class="hljs-attr">document:</span>
+  <span class="hljs-attr">template:</span> <span class="hljs-string">path/to/your/template/file.html</span>
+</code></pre>
+              <div class="markdown-alert markdown-alert-info">
+                <span class="markdown-alert-title"><span class="material-symbols">info</span> Info</span>
+                <span class="markdown-alert-content">Remember to include the special <code>{{body}}</code> tag inside your template, so the content of the processed <code>md</code> file that use this template can include their content there.</span>
+              </div>
+              <h2 id="tags-on-your-markdown-files">Tags on your Markdown files <a class="header-anchor" href="#tags-on-your-markdown-files">#</a></h2>
+              <p>It is possible to include multiple tags on your <code>html</code> template files and <code>md</code> files. This is the list of tags that Lighthouse supports now:</p>
+              <ul>
+                <li><code>foreach</code></li>
+                <li><code>if</code></li>
+                <li><code>&lt;variables&gt;</code></li>
+                <li><code>include</code></li>
+                <li><code>generate</code></li>
+                <li><code>ignore</code></li>
+              </ul>
+              <h3 id="foreach-tag">foreach tag <a class="header-anchor" href="#foreach-tag">#</a></h3>
+              <p>This tag is in charge of the expansion of your template. It allows to repeat a given number of time a section of your template or your document, using different variables to do it.</p>
+              <p>To use it on your documents:</p>
+              <ul>
+                <li><code>{{foreach &lt;variable> &lt;list>}}<your-code>{{foreach-end}}</code></li>
+                <li><code>{{foreach &lt;variable> &lt;list>}}<your-code>{{foreach-end &lt;list>}}</code></li>
+              </ul>
+              <p><code>list</code> element is a collection of elements on your configuration. <code>variable</code> is a private-scope variable you declare to use inside each loop, and allows you to access the element of the collection the loop is processing on each iteration.</p>
+              <p>It is possible to create nested <code>foreach</code> expressions, so you can create more complex structures.</p>
+              <p><code>foreach</code> loops are processed from <em>out to in</em>, what means that the more external loops are processed first. This is required because of the variable replacements done, as internal loops may reference variables declared on a external structure.</p>
+              <div class="markdown-alert markdown-alert-warning">
+                <span class="markdown-alert-title"><span class="material-symbols">warning</span> Warning</span>
+                <span class="markdown-alert-content">Pay attention there are two ways of declaring a <code>foreach</code>. The second way allows to mark the closing mark to know the end of a given loop. This alternative way <strong>is mandatory to be used</strong> when declaring nested loops, as it allows the processor to detect the closing tags for each level.</span>
+              </div>
+              <h3 id="if-tag">if tag <a class="header-anchor" href="#if-tag">#</a></h3>
+              <p>The aim of this tag is the selection of different blocks on your template or document. Depending of the value of a given variable, one side or the other of the block is used.</p>
+              <p>To use it on your document:</p>
+              <ul>
+                <li><code>{{if &lt;variable>}}&lt;your-code>{{if-end}}</code></li>
+                <li><code>{{if &lt;variable>}}&lt;your-code>{{if-end &lt;variable>}}</code></li>
+                <li><code>{{if &lt;variable>}}&lt;your-code>{{if-else}}&lt;alternative-code>{{if-end}}</code></li>
+                <li><code>{{if &lt;variable>}}&lt;your-code>{{if-else}}&lt;alternative-code>{{if-end &lt;variable>}}</code></li>
+              </ul>
+              <p>The value of <code>variable</code> is used to select the section of the tag. It is used Javascript to evaluate the variable, so the same conditions are applied for the truthfulness or nullability of an expression.</p>
+              <p>It is possible to create nested <code>if</code> expressions, so you can create more complex structures.</p>
+              <p>On the contrary of <code>foreach</code> tags, <code>if</code> are processed from <em>in to out</em>. This means that internal conditions are processed first.</p>
+              <div class="markdown-alert markdown-alert-info">
+                <span class="markdown-alert-title"><span class="material-symbols">info</span> Info</span>
+                <span class="markdown-alert-content">Following the same approach as on foreach loops, there are two ways of declaring an <code>if</code>. The second way allows to mark the closing mark to know the end of a given loop using the same variable as a tag. On this case, tags are optional, and you may use them if you wish to improve readability.</span>
+              </div>
+              <h3 id="variable-tags">variable tags <a class="header-anchor" href="#variable-tags">#</a></h3>
+              <p>It is possible to create tag with any given value and use them on any part of the template or document. If the variable is not found on the configuration, a log will be printed on the console and it will replaced by an empty string.</p>
+              <div class="markdown-alert markdown-alert-info">
+                <span class="markdown-alert-title"><span class="material-symbols">info</span> Info</span>
+                <span class="markdown-alert-content">If the debug mode is active, not found variables will be replaced by an error template on the output document.</span>
+              </div>
+              <h3 id="including-external-files">Including external files <a class="header-anchor" href="#including-external-files">#</a></h3>
+              <p>To include static content from other files on your template or document, the <code>include</code> tag can be used.</p>
+              <p>To use it on your document:</p>
+              <ul>
+                <li><code>{{include &lt;path-to-your-file>}}</code></li>
+                <li><code>{{i &lt;path-to-your-file>}}</code></li>
+              </ul>
+              <p>This tag can be also used on Markdown header section:</p>
+              <pre><code class="hljs">---
+title: Include a file content
+custom:
+  path:
+    include: {{include _include/file_a.md}}
+---
+
+# {{title}}
+
+{{i _include/file_b.html}}
+
+{{custom.path.include}}
+</code></pre>
+              <p>This tag will load the content of the given file and will be replaced with the text that is inside the file. This is not only limited to <code>html</code> or <code>md</code> files, any text file can be loaded using this method.</p>
+              <h3 id="generating-code-using-javascript">Generating code using Javascript <a class="header-anchor" href="#generating-code-using-javascript">#</a></h3>
+              <p>There is also ways to generate dynamic content to your templates or documents. For that purpose the <code>generate</code> tag is here.</p>
+              <p>To use it on your document:</p>
+              <ul>
+                <li><code>{{generate &lt;path-to-your-js-file>}}</code></li>
+                <li><code>{{g &lt;path-to-your-js-file>}}</code></li>
+                <li><code>{{generate &lt;path-to-your-js-file>::&lt;function-to-call>(&lt;parameters>)}}</code></li>
+                <li><code>{{g &lt;path-to-your-js-file>::&lt;function-to-call>(&lt;parameters>)}}</code></li>
+              </ul>
+              <p>Example of usage:</p>
+              <p>File <code>file_a.js</code>:</p>
+              <pre><code class="hljs"><span class="hljs-keyword">function</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;This content comes from JS code.&quot;</span>;
+}
+</code></pre>
+              <p>File <code>file_b.js</code>:</p>
+              <pre><code class="hljs"><span class="hljs-keyword">function</span> <span class="hljs-title function_">execute</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">return</span> value.<span class="hljs-title function_">toUpperCase</span>();
+}
+</code></pre>
+              <pre><code class="hljs">---
+title: Generate content using JS
+custom:
+  path:
+    generate: &quot;{{generate file_a.js}}&quot;
+  variable: This should appear in capital letters
+---
+
+# {{title}}
+
+{{g file_b.js::execute({{custom.variable}})}}
+
+{{custom.path.generate}}
+</code></pre>
+              <div class="markdown-alert markdown-alert-info">
+                <span class="markdown-alert-title"><span class="material-symbols">info</span> Info</span>
+                <span class="markdown-alert-content">If not call function is set on the tag, <code>main</code> function with no parameters will be invoked.</span>
+              </div>
+              <h3 id="ignoring-lighthouse-tags">Ignoring Lighthouse tags <a class="header-anchor" href="#ignoring-lighthouse-tags">#</a></h3>
+              <p>Sometimes, it may be useful to skip the processing of some of the Lighthouse tags, as an example: this page. Here, we are showing some examples of how to use tags on different scenarios, but we don't want the site generator to process them.</p>
+              <p>For that purpose, the <code>ignore</code> tag is there. It allows to skip the processing of all Lighthouse tags between the opening and closing tags.</p>
+              <p>To use it on your document:</p>
+              <ul>
+                <li><code>&#123;{ignore}}&lt;section-to-ignore>{{ignore-end}}</code></li>
+              </ul>
+              <p>Example of usage:</p>
+              <pre><code class="hljs">&#123;{ignore}}
+{{ignore-variable-replacements}}
+{{ignore-end}}
+</code></pre>
+              <p>After processing, this code will be turned into:</p>
+              <pre><code class="hljs">{{ignore-variable-replacements}}
+</code></pre>
+              <p>As it can be seen, <code>ignore</code> block is discarded, and its content is kept.</p>
+              <div class="markdown-alert markdown-alert-info">
+                <span class="markdown-alert-title"><span class="material-symbols">info</span> Info</span>
+                <span class="markdown-alert-content">This task is used massively on this documentation page, as tag examples need to be kept without processing.</span>
+              </div>
+              <h2 id="looking-for-more-examples%3F">Looking for more examples? <a class="header-anchor" href="#looking-for-more-examples%3F">#</a></h2>
+              <p>If you need more examples or use cases, you may want to go <a href="https://github.com/cjpelaezrivas/Lighthouse/tree/master/tests/functional/test_site">to the test section</a>, where most of the scenarios to generate sites are covered. You can discover some more complex usages of Lighthouse there.</p>
+              <h2 id="reserved-configuration">Reserved configuration <a class="header-anchor" href="#reserved-configuration">#</a></h2>
+              <p>As the user has full freedom to set the Markdown configuration on the <code>yaml</code> header, it has to be taken into account that some configuration paths are used internally by the application.</p>
+              <p>Make sure to don't override them by mistake. This is the list of them and a short description of their use:</p>
+              <pre><code class="hljs"><span class="hljs-attr">site:</span>
+  <span class="hljs-string">base_url</span> <span class="hljs-string">//</span> <span class="hljs-string">Root</span> <span class="hljs-string">page</span> <span class="hljs-string">address</span> <span class="hljs-string">where</span> <span class="hljs-string">the</span> <span class="hljs-string">site</span> <span class="hljs-string">is</span> <span class="hljs-string">being</span> <span class="hljs-string">published</span>
+<span class="hljs-attr">document:</span>
+  <span class="hljs-string">template</span> <span class="hljs-string">//</span> <span class="hljs-string">HTML</span> <span class="hljs-string">Template</span> <span class="hljs-string">the</span> <span class="hljs-string">file</span> <span class="hljs-string">used</span> <span class="hljs-string">for</span> <span class="hljs-string">generating</span> <span class="hljs-string">the</span> <span class="hljs-string">output</span> <span class="hljs-string">files</span>
+  <span class="hljs-attr">output:</span>
+    <span class="hljs-string">path</span> <span class="hljs-string">//</span> <span class="hljs-string">Alternative</span> <span class="hljs-string">path</span> <span class="hljs-string">inside</span> <span class="hljs-string">`output.directory`</span> <span class="hljs-string">where</span> <span class="hljs-string">the</span> <span class="hljs-string">converted</span> <span class="hljs-string">file</span> <span class="hljs-string">will</span> <span class="hljs-string">be</span> <span class="hljs-string">stored</span>
+    <span class="hljs-string">name</span> <span class="hljs-string">//</span> <span class="hljs-string">Alternative</span> <span class="hljs-string">converted</span> <span class="hljs-string">file</span> <span class="hljs-string">name</span>
+  <span class="hljs-attr">headers:</span>
+    <span class="hljs-string">generate_ids</span> <span class="hljs-string">//</span> <span class="hljs-string">Enables</span> <span class="hljs-string">if</span> <span class="hljs-string">IDs</span> <span class="hljs-string">are</span> <span class="hljs-string">generated</span> <span class="hljs-string">and</span> <span class="hljs-string">headers</span> <span class="hljs-string">are</span> <span class="hljs-string">converted</span> <span class="hljs-string">to</span> <span class="hljs-string">anchors</span> <span class="hljs-string">on</span> <span class="hljs-string">HTML</span> <span class="hljs-string">output</span> <span class="hljs-string">files</span>
+    <span class="hljs-attr">permalinks:</span>
+      <span class="hljs-string">enabled</span> <span class="hljs-string">//</span> <span class="hljs-string">Enables</span> <span class="hljs-string">the</span> <span class="hljs-string">display</span> <span class="hljs-string">of</span> <span class="hljs-string">permalinks</span> <span class="hljs-string">next</span> <span class="hljs-string">to</span> <span class="hljs-string">each</span> <span class="hljs-string">of</span> <span class="hljs-string">the</span> <span class="hljs-string">headers</span>
+      <span class="hljs-string">symbol</span> <span class="hljs-string">//</span> <span class="hljs-string">Specifies</span> <span class="hljs-string">the</span> <span class="hljs-string">symbols</span> <span class="hljs-string">used</span> <span class="hljs-string">on</span> <span class="hljs-string">permalinks</span>
+  <span class="hljs-attr">toc:</span>
+    <span class="hljs-string">enabled</span> <span class="hljs-string">//</span> <span class="hljs-string">Enables</span> <span class="hljs-string">TOC</span>
+    <span class="hljs-string">levels</span> <span class="hljs-string">//</span> <span class="hljs-string">Array</span> <span class="hljs-string">to</span> <span class="hljs-string">configure</span> <span class="hljs-string">the</span> <span class="hljs-string">visible</span> <span class="hljs-string">levels</span> <span class="hljs-string">of</span> <span class="hljs-string">the</span> <span class="hljs-string">TOC</span>
+    <span class="hljs-string">header</span> <span class="hljs-string">//</span> <span class="hljs-string">Text</span> <span class="hljs-string">to</span> <span class="hljs-string">be</span> <span class="hljs-string">included</span> <span class="hljs-string">before</span> <span class="hljs-string">the</span> <span class="hljs-string">TOC</span>
+    <span class="hljs-string">footer</span> <span class="hljs-string">//</span> <span class="hljs-string">Text</span> <span class="hljs-string">to</span> <span class="hljs-string">be</span> <span class="hljs-string">included</span> <span class="hljs-string">after</span> <span class="hljs-string">the</span> <span class="hljs-string">TOC</span>
+<span class="hljs-attr">output:</span>
+  <span class="hljs-string">directory</span> <span class="hljs-string">//</span> <span class="hljs-string">Directory</span> <span class="hljs-string">where</span> <span class="hljs-string">the</span> <span class="hljs-string">converted</span> <span class="hljs-string">files</span> <span class="hljs-string">will</span> <span class="hljs-string">be</span> <span class="hljs-string">stored</span>
+  <span class="hljs-string">copy_files</span> <span class="hljs-string">//</span> <span class="hljs-string">Array</span> <span class="hljs-string">of</span> <span class="hljs-string">files</span> <span class="hljs-string">(and</span> <span class="hljs-string">destination</span> <span class="hljs-string">name)</span> <span class="hljs-string">to</span> <span class="hljs-string">be</span> <span class="hljs-string">copied</span> <span class="hljs-string">to</span> <span class="hljs-string">the</span> <span class="hljs-string">output</span> <span class="hljs-string">file</span>
+  <span class="hljs-attr">sitemap:</span>
+    <span class="hljs-string">enabled</span> <span class="hljs-string">//</span> <span class="hljs-string">Indicates</span> <span class="hljs-string">if</span> <span class="hljs-string">the</span> <span class="hljs-string">sitemap</span> <span class="hljs-string">is</span> <span class="hljs-string">generated</span>
+    <span class="hljs-attr">lastmod // Date and time to set on the sitemap.xml entries. Suggested format:</span> <span class="hljs-string">&quot;YYYY-mm-ddTHH:MM:ss+00:00&quot;</span><span class="hljs-string">.</span> <span class="hljs-string">Sets</span> <span class="hljs-string">execution</span> <span class="hljs-string">time</span> <span class="hljs-string">if</span> <span class="hljs-string">empty</span>
+    <span class="hljs-string">extra_links</span> <span class="hljs-string">//</span> <span class="hljs-string">List</span> <span class="hljs-string">of</span> <span class="hljs-string">resources</span> <span class="hljs-string">that</span> <span class="hljs-string">will</span> <span class="hljs-string">be</span> <span class="hljs-string">added</span> <span class="hljs-string">additionally</span> <span class="hljs-string">to</span> <span class="hljs-string">the</span> <span class="hljs-string">site</span> <span class="hljs-string">map</span>
+<span class="hljs-attr">processing_file:</span> <span class="hljs-string">//</span> <span class="hljs-string">Path</span> <span class="hljs-string">to</span> <span class="hljs-string">the</span> <span class="hljs-string">current</span> <span class="hljs-string">MD</span> <span class="hljs-string">file</span> <span class="hljs-string">the</span> <span class="hljs-string">application</span> <span class="hljs-string">is</span> <span class="hljs-string">processing.</span> <span class="hljs-string">Not</span> <span class="hljs-string">present</span> <span class="hljs-string">if</span> <span class="hljs-string">processing</span> <span class="hljs-string">non</span> <span class="hljs-string">MD</span> <span class="hljs-string">files</span>
+  <span class="hljs-string">path</span> <span class="hljs-string">//</span> <span class="hljs-string">Complete</span> <span class="hljs-string">path</span> <span class="hljs-string">to</span> <span class="hljs-string">the</span> <span class="hljs-string">file,</span> <span class="hljs-string">including</span> <span class="hljs-string">name</span> <span class="hljs-string">and</span> <span class="hljs-string">extension</span>
+  <span class="hljs-string">name</span> <span class="hljs-string">//</span> <span class="hljs-string">Name</span> <span class="hljs-string">of</span> <span class="hljs-string">the</span> <span class="hljs-string">file</span> <span class="hljs-string">is</span> <span class="hljs-string">being</span> <span class="hljs-string">converted</span>
+  <span class="hljs-string">extension</span> <span class="hljs-string">//</span> <span class="hljs-string">Extension</span> <span class="hljs-string">of</span> <span class="hljs-string">the</span> <span class="hljs-string">file</span> <span class="hljs-string">is</span> <span class="hljs-string">being</span> <span class="hljs-string">converted</span>
+<span class="hljs-attr">execute:</span>
+  <span class="hljs-string">before_all</span> <span class="hljs-string">//</span> <span class="hljs-string">Array</span> <span class="hljs-string">of</span> <span class="hljs-string">scripts</span> <span class="hljs-string">to</span> <span class="hljs-string">execute</span> <span class="hljs-string">before</span> <span class="hljs-string">starting</span> <span class="hljs-string">processing</span> <span class="hljs-string">files</span> <span class="hljs-string">and</span> <span class="hljs-string">directories</span>
+  <span class="hljs-string">before_each</span> <span class="hljs-string">//</span> <span class="hljs-string">Array</span> <span class="hljs-string">of</span> <span class="hljs-string">scripts</span> <span class="hljs-string">to</span> <span class="hljs-string">execute</span> <span class="hljs-string">before</span> <span class="hljs-string">processing</span> <span class="hljs-string">the</span> <span class="hljs-string">file</span> <span class="hljs-string">where</span> <span class="hljs-string">it</span> <span class="hljs-string">is</span> <span class="hljs-string">set</span>
+  <span class="hljs-string">before_save_each</span> <span class="hljs-string">//</span> <span class="hljs-string">Array</span> <span class="hljs-string">of</span> <span class="hljs-string">scripts</span> <span class="hljs-string">to</span> <span class="hljs-string">execute</span> <span class="hljs-string">before</span> <span class="hljs-string">saving</span> <span class="hljs-string">the</span> <span class="hljs-string">generated</span> <span class="hljs-string">file</span>
+  <span class="hljs-string">after_each</span> <span class="hljs-string">//</span> <span class="hljs-string">Array</span> <span class="hljs-string">of</span> <span class="hljs-string">scripts</span> <span class="hljs-string">to</span> <span class="hljs-string">execute</span> <span class="hljs-string">after</span> <span class="hljs-string">processing</span> <span class="hljs-string">the</span> <span class="hljs-string">file</span> <span class="hljs-string">where</span> <span class="hljs-string">it</span> <span class="hljs-string">is</span> <span class="hljs-string">set</span>
+  <span class="hljs-string">after_all</span> <span class="hljs-string">//</span> <span class="hljs-string">Array</span> <span class="hljs-string">of</span> <span class="hljs-string">scripts</span> <span class="hljs-string">to</span> <span class="hljs-string">execute</span> <span class="hljs-string">after</span> <span class="hljs-string">processing</span> <span class="hljs-string">all</span> <span class="hljs-string">files</span> <span class="hljs-string">and</span> <span class="hljs-string">directories</span>
+</code></pre>
+            </div>
+            <div class="col xl3 hide-on-large-and-down">
+              <div class="table-of-contents"><span class="table-of-contents-header">On this page</span>
+                <ul>
+                  <li><a href="#minimal-configuration">Minimal configuration </a></li>
+                  <li><a href="#using-a-custom-template">Using a custom template </a></li>
+                  <li><a href="#tags-on-your-markdown-files">Tags on your Markdown files </a>
+                    <ul>
+                      <li><a href="#foreach-tag">foreach tag </a></li>
+                      <li><a href="#if-tag">if tag </a></li>
+                      <li><a href="#variable-tags">variable tags </a></li>
+                      <li><a href="#including-external-files">Including external files </a></li>
+                      <li><a href="#generating-code-using-javascript">Generating code using Javascript </a></li>
+                      <li><a href="#ignoring-lighthouse-tags">Ignoring Lighthouse tags </a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#looking-for-more-examples%3F">Looking for more examples? </a></li>
+                  <li><a href="#reserved-configuration">Reserved configuration </a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    </main>
+    <footer class="page-footer">
+      <div class="section">
+        <nav class="pager-prev-next">
+          <div class="container">
+            <div class="row">
+              <div class="col s12 m6">
+                <a class="pager-link prev" href="./getting-started.html">
+                  <span class="description">Previous page</span>
+                  <span class="title">Getting started</span>
+                </a>
+              </div>
+              <div class="col s12 m6">
+                <a class="pager-link next" href="./license.html">
+                  <span class="description">Next page</span>
+                  <span class="title">License</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </footer>
+    <a id="scrollToTopBtn" class="btn-large btn-flat btn-outline waves-effect waves-light primary-color"><span
+        class="icon material-symbols">keyboard_double_arrow_up</span>Back to top</a>
+    <script src="lib/materialize/1.0.0/js/materialize.js"></script>
+    <script src="lib/lh-docs/0.0.1/js/materialize-init.js"></script>
+    <script src="lib/lh-docs/0.0.1/js/scroll-to-top.js"></script>
+    <script src="lib/lh-docs/0.0.1/js/toc.js"></script>
+  </body>
+  
+</html>

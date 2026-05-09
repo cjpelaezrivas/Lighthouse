@@ -1,0 +1,29 @@
+.dark-mode {
+    --lh-primary-fg-color: #d39a28;
+    --lh-primary-bg-color: #161616;
+    --lh-secondary-bg-color: #222222;
+
+    --lh-text-color: #dadada;
+    --lh-text-inverse-color: #151515;
+    --lh-link-hover-color: #d36500;
+
+    --lh-border-color: #333333;
+    --lh-border-basic: 1px solid var(--lh-border-color);
+
+    --lh-element-background-hover: rgba(255, 255, 255, 0.05);
+
+    --lh-scroll-bar: rgba(255, 255, 255, 0.333);
+
+    --lh-alert-note-color: #232323;
+    --lh-alert-note-border-color: color-mix(in srgb, var(--lh-alert-note-color) 80%, white);
+    --lh-alert-note-text-color: color-mix(in srgb, var(--lh-alert-note-color) 40%, white);
+    --lh-alert-info-color: #161e2d;
+    --lh-alert-info-border-color: color-mix(in srgb, var(--lh-alert-info-color) 80%, white);
+    --lh-alert-info-text-color: color-mix(in srgb, var(--lh-alert-info-color) 40%, white);
+    --lh-alert-warning-color: #433113;
+    --lh-alert-warning-border-color: color-mix(in srgb, var(--lh-alert-warning-color) 80%, white);
+    --lh-alert-warning-text-color: color-mix(in srgb, var(--lh-alert-warning-color) 40%, white);
+    --lh-alert-danger-color: #331818;
+    --lh-alert-danger-border-color: color-mix(in srgb, var(--lh-alert-danger-color) 80%, white);
+    --lh-alert-danger-text-color: color-mix(in srgb, var(--lh-alert-danger-color) 40%, white);
+}

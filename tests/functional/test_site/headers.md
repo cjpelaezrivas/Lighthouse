@@ -3,6 +3,8 @@ title: Headers with ids and TOC test
 document:
   headers:
     generate_ids: true
+    permalinks:
+      enabled: false
   toc:
     enabled: true
     levels: [ 2, 3, 4]

@@ -1,0 +1,40 @@
+footer.page-footer {
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-footer {
+    border-top: var(--lh-border-basic);
+    color: var(--lh-footer-text-color);
+    background-color: var(--lh-footer-bg-color);
+}
+
+.page-footer .section {
+    padding: 0;
+}
+
+.page-footer .section .container {
+    width: 90%;
+}
+
+.page-footer .footer-copyright {
+    color: var(--lh-footer-text-color);
+    background-color: var(--lh-secondary-bg-color);
+}
+
+.sidenav li.page-footer {
+    padding: 0;
+    line-height: unset !important;
+}
+
+.sidenav li.page-footer .container {
+    font-size: 0.75em;
+    padding: 0.6rem;
+    width: 100%;
+    text-align: center;
+}
+
+.sidenav li.page-footer .footer-copyright {
+    border-top: var(--lh-border-basic);
+    font-size: 0.8rem;
+}

@@ -1,0 +1,69 @@
+/* Navbar */
+
+nav .source-github {
+    display: flex;
+    height: var(--lh-nav-height-md);
+    color: var(--lh-text-inverse-color);
+}
+
+nav .source-github-icon {
+    width: 28px;
+    padding: 0.6rem 0;
+    margin-right: 0.6rem;
+
+    fill: var(--lh-text-inverse-color);
+}
+
+nav .source-github-info {
+    line-height: initial;
+    font-size: 0.8rem;
+    padding: 0.8rem 0;
+}
+
+nav .source-github-info__items {
+    font-size: 0.8rem;
+}
+
+nav .source-github-info__item:not(:first-child) {
+    margin-left: 0.6rem;
+}
+
+nav .source-github-info__item .material-symbols {
+    position: relative;
+    font-size: 0.9rem;
+}
+
+/* Sidenav */
+
+.sidenav .source-github {
+    display: flex;
+    border-bottom: var(--lh-border-basic);
+    line-height: initial;
+    height: initial;
+    padding-top: 0.3rem;
+}
+
+.sidenav .source-github-icon {
+    width: 1.8rem;
+    padding: 0.4rem 0;
+    margin-right: 0.6rem;
+
+    fill: var(--lh-text-color);
+}
+
+.sidenav .source-github-info__items {
+    display: flex;
+    font-size: 0.85rem;
+}
+
+.sidenav .source-github-info__item {
+    line-height: initial;
+}
+
+.sidenav .source-github-info__item:not(:first-child) {
+    margin-left: 0.6rem;
+}
+
+.sidenav .source-github-info__item .material-symbols {
+    font-size: 1.0rem;
+}

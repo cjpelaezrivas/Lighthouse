@@ -1,53 +1,60 @@
 import { AppConfiguration } from "../types/app-configuration";
-import { fileUtils } from "../utils/file-utils";
 import { objectUtils } from "../utils/object-utils";
 import { logUtils } from "../utils/log-utils";
 import { ScriptExecutionService} from "../execute/script-execution-service";
-import { MD_EXTENSION } from "../constants";
-import { MarkdownRenderer } from "../content/markdown-renderer";
-import { FOREACH, FOREACH_TAG, GENERATE, IF, IF_TAG, INCLUDE, RegexResult, VARIABLE } from "./tag_regexs";
+import { IGNORE_REGEX, FOREACH_REGEX, FOREACH_TAG_REGEX, GENERATE_REGEX, IF_REGEX, INCLUDE_REGEX, VARIABLE_REGEX, RegexResult } from "./tag_regexs";
 import { AbstractTagReplacerService } from "./abstract-tag-replacer-service";
 
 export class TagReplacerService extends AbstractTagReplacerService {
 
-    private markdownRenderer: MarkdownRenderer = new MarkdownRenderer();
     private scriptExecutionService: ScriptExecutionService = new ScriptExecutionService();
 
     protected initialize() {
         this.setFunctions(new Map([
+            ["ignore-tag", {
+                regex: IGNORE_REGEX,
+                function: this.applyIgnore
+            }],
             ["foreach-tag", {
-                regex: FOREACH_TAG,
+                regex: FOREACH_TAG_REGEX,
                 function: this.applyExpansion
             }],
             ["foreach", {
-                regex: FOREACH,
+                regex: FOREACH_REGEX,
                 function: this.applyExpansion
             }],
-            ["if-tag", {
-                regex: IF_TAG,
-                function: this.applySelection
-            }],
             ["if", {
-                regex: IF,
+                regex: IF_REGEX,
                 function: this.applySelection
             }],
             ["variable", {
-                regex: VARIABLE,
+                regex: VARIABLE_REGEX,
                 function: this.applySubstitution
             }],
             ["include", {
-                regex: INCLUDE,
+                regex: INCLUDE_REGEX(),
                 function: this.applyInclude
             }],
             ["generate", {
-                regex: GENERATE,
+                regex: GENERATE_REGEX(),
                 function: this.applyGenerate
             }]
         ]));
     }
 
+    private applyIgnore(result: RegexResult, appConfiguration: AppConfiguration) {
+        this.debug(`IGNORE - FUNCTION EXTRACT BLOCK IGNORE - ${JSON.stringify(result)}`, appConfiguration);
+
+        const key = `LH_IGNORE_${this.getIgnoreBlocks().size}_LH`;
+        const content = result.regexResult[1];
+
+        this.getIgnoreBlocks().set(key, content?.trim());
+
+        return key;
+    }
+
     private applyExpansion(result: RegexResult, appConfiguration: AppConfiguration) {
-        super.debug(`EXPANSION - FUNCTION FOREACH - ${result}`, appConfiguration);
+        super.debug(`EXPANSION - FUNCTION FOREACH - ${JSON.stringify(result)}`, appConfiguration);
 
         const item = result.regexResult[1];
         const field = result.regexResult[2];
@@ -64,8 +71,8 @@ export class TagReplacerService extends AbstractTagReplacerService {
         let replacement = ``;
         const itemRegex = new RegExp(`({{.*?)(${item})(.*?}})`, "g");
 
-        if(listFromConfig.length === 1) {
-            replacement += content.replaceAll(itemRegex, `$1${field}$3`);
+        if(this.isSingleElement(listFromConfig)) {
+             replacement += content.replaceAll(itemRegex, `$1${field}$3`);
         } else {
             listFromConfig.forEach((v, i, list) => {
                 replacement += content
@@ -77,14 +84,12 @@ export class TagReplacerService extends AbstractTagReplacerService {
         return replacement;
     }
 
-    private getListFromConfig(field: string, appConfiguration: AppConfiguration): string[] | null {
-        let value = objectUtils.get(field, appConfiguration.configuration) as any | null;
+    private isSingleElement(list: any[]) {
+        return objectUtils.isPrimitive(list) || objectUtils.isString(list) || objectUtils.isObject(list);
+    }
 
-        if(value && !Array.isArray(value)) {
-            value = [value];
-        }
-
-        return value as string[];
+    private getListFromConfig(field: string, appConfiguration: AppConfiguration) {
+        return objectUtils.get(field, appConfiguration.configuration) as any[] | null;
     }
 
     private applySelection(result: RegexResult, appConfiguration: AppConfiguration) {
@@ -93,7 +98,7 @@ export class TagReplacerService extends AbstractTagReplacerService {
         const field = result.regexResult[1];
         const configValue = objectUtils.get(field, appConfiguration.configuration);
 
-        return !!configValue ? result.regexResult[2] : result.regexResult[3];
+        return !!configValue ? result.regexResult[2]?.trim() : result.regexResult[3]?.trim();
     }
 
     private applySubstitution(result: RegexResult, appConfiguration: AppConfiguration) {
@@ -120,13 +125,7 @@ export class TagReplacerService extends AbstractTagReplacerService {
         super.debug(`INCLUDE - FUNCTION INCLUDE - ${JSON.stringify(result)}`, appConfiguration);
 
         const filePath = result.regexResult[1];
-        let content = super.getFileContent(filePath, appConfiguration)?.trim();
-
-        if(fileUtils.getFileExtension(filePath).toLowerCase() === MD_EXTENSION) {
-            content = this.markdownRenderer.configure(appConfiguration).render(content);
-        }
-
-        return content;
+        return super.getFileContent(filePath, appConfiguration)?.trim();
     }
 
     private applyGenerate(result: RegexResult, appConfiguration: AppConfiguration) {
