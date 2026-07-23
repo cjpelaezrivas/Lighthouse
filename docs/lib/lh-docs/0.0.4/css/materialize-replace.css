@@ -1,0 +1,64 @@
+html {
+    font-size: 16px;
+    color: var(--lh-text-color);
+}
+
+body {
+    background-color: var(--lh-primary-bg-color);
+}
+
+header, main, footer {
+    padding-left: var(--lh-sidebar-max-width);
+}
+
+h1 {
+    margin-top: 1rem;
+
+    font-size: 2.0rem;
+    font-weight: 500;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.6rem;
+}
+
+h4 {
+    font-size: 1.4rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1.1rem;
+}
+
+a {
+    color: var(--lh-primary-fg-color);
+    text-decoration: underline;
+}
+
+a:hover {
+    color: var(--lh-link-hover-color);
+}
+
+ul:not(.browser-default) {
+    list-style-type: square;
+    padding-left: 2.2rem;
+}
+
+ul:not(.browser-default) > li {
+    list-style-type: square;
+}
+
+.material-symbols {
+    line-height: unset;
+
+    position: relative;
+    top: 0.2em;
+}
